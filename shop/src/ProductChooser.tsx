@@ -17,12 +17,12 @@ export default function ProductChooser({
   onSelect: (id: string) => void;
   onAdd: (id: string, qty: number) => boolean;
 }) {
-  const [image, setImage] = useState(0),
+  const [image, setImage] = useState(() => Math.max(0, product.images.findIndex((im) => im.staged))),
     [zoom, setZoom] = useState(false),
     [added, setAdded] = useState(false);
   const reduce = useReducedMotion();
   useEffect(() => {
-    setImage(0);
+    setImage(Math.max(0, product.images.findIndex((im) => im.staged)));
     setAdded(false);
   }, [product.id]);
   useEffect(() => {
@@ -56,7 +56,7 @@ export default function ProductChooser({
           >
             <span className="motif-image">
               <img
-                src={`/images/${p.images[0].src}-320.webp`}
+                src={`/images/${(p.images.find((im) => im.staged) || p.images[0]).src}-320.webp`}
                 alt=""
                 loading="lazy"
                 width="160"

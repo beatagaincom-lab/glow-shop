@@ -185,12 +185,12 @@ export default function App() {
           <div className="hero-visual">
             <div className="hero-arch">
               <img
-                src="/images/hero-960.webp"
-                srcSet="/images/hero-640.webp 640w, /images/hero-960.webp 960w, /images/hero-1440.webp 1440w"
+                src="/images/stars-v3-960.webp"
+                srcSet="/images/stars-v3-640.webp 640w, /images/stars-v3-960.webp 960w, /images/stars-v3-1440.webp 1122w"
                 sizes="(max-width:760px) 100vw, 50vw"
-                alt="Inszenierte Wohnszene: eine graue Stars-Decke auf einem cremefarbenen Sessel im warmen Abendlicht"
-                width="1024"
-                height="1536"
+                alt="Inszenierte Wohnszene: eine graue Stars-Decke auf einem Leinensessel im Zürcher Abendlicht"
+                width="1122"
+                height="1402"
                 fetchPriority="high"
               />
               <a
@@ -311,8 +311,8 @@ export default function App() {
         <section className="editorial section-shell">
           <Reveal className="editorial-picture">
             <img
-              src="/images/evening-960.webp"
-              srcSet="/images/evening-640.webp 640w, /images/evening-960.webp 960w, /images/evening-1440.webp 1440w"
+              src="/images/evening-v3-960.webp"
+              srcSet="/images/evening-v3-640.webp 640w, /images/evening-v3-960.webp 960w, /images/evening-v3-1440.webp 1440w"
               sizes="(max-width:760px) 100vw, 55vw"
               alt="Inszenierte Wohnszene: Eine Frau liest auf dem Sofa unter der grauen Stars-Decke"
               width="1536"

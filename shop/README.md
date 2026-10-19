@@ -31,7 +31,7 @@ The preview is excluded from search indexing. Remove preview labels and indexing
 
 ## Images
 
-Product and glow images come from the supplied Kremer catalog. Five editorial scenes use the actual Stars, Hearts, Raket and Schmetterlinge blankets as references. The three new portrait scenes are 1122 × 1402 pixels at source, served as responsive WebP without enlargement. Generated gallery images are explicitly labelled as AI lifestyle scenes; manufacturer photos remain authoritative for pattern, color and light effect. The butterfly scene was revised against two real references to reduce pattern drift. These are illustrative scenes, not exact product photography or evidence of glow intensity. Raw B2B data, purchasing information, source archives and design drafts are excluded from this repository.
+Product and glow images come from the supplied Kremer catalog. The current editorial series contains six reference-based AI scenes: one portrait for each of the five motifs and a wide Stars reading scene. Portrait sources are 1122 × 1402 pixels; the wide source is 1536 × 1024 pixels. Responsive WebP exports use quality 92 without enlargement. Every motif opens with its new lifestyle scene; original manufacturer photographs remain accessible in the same gallery. Generated scenes are explicitly labelled and are illustrative, not exact product photography or evidence of glow intensity. Manufacturer photos remain authoritative for pattern, color and light effect. Raw B2B data, purchasing information and source archives are excluded from this repository.
 
 ## Review updates — 19 October 2026
 
