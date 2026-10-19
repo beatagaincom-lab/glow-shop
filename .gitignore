@@ -1,0 +1,12 @@
+*
+!.gitignore
+!shop/
+!shop/**
+shop/node_modules/
+shop/dist/
+shop/.env*
+!shop/.env.example
+shop/.vercel/
+shop/.qa/
+shop/*.log
+shop/*.tsbuildinfo
