@@ -4,7 +4,7 @@ export type Product = {
   name: string;
   subtitle: string;
   color: string;
-  images: { src: string; alt: string; staged?: boolean }[];
+  images: { src: string; alt: string; staged?: boolean; featured?: boolean }[];
   night?: string;
 };
 export const PRICE = 5990;
@@ -44,6 +44,7 @@ export const products: Product[] = [
       { src: "unicorn-folded", alt: "Original Flair Unicorn gefaltet" },
       { src: "unicorn-pack", alt: "Original Flair Unicorn mit Banderole" },
       { src: "unicorn-v3", alt: "KI-Wohnszene nach Originalreferenz: Unicorn im sanften Morgenlicht", staged: true },
+      { src: "unicorn-child-v1", alt: "KI-Familienszene nach Produktreferenz: Mädchen mit Buch und Unicorn-Decke", staged: true, featured: true },
     ],
     night: "unicorn-night",
   },
@@ -77,6 +78,7 @@ export const products: Product[] = [
         alt: "Original Flair Raket mit Weltraummotiven und Leuchteinsatz",
       },
       { src: "raket-v3", alt: "KI-Wohnszene nach Originalreferenz: Raket in der Leseecke", staged: true },
+      { src: "raket-child-v1", alt: "KI-Familienszene nach Produktreferenz: Junge mit Raket-Decke auf dem Sofa", staged: true, featured: true },
     ],
   },
   {

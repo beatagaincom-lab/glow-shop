@@ -4,6 +4,10 @@ import { Check, Expand, ChevronLeft, ChevronRight } from "lucide-react";
 import { products, money, PRICE, type Product } from "./data";
 import { Accordion, GlowButton, Modal, Quantity } from "./components";
 
+function featuredImage(product: Product) {
+  return product.images.find((im) => im.featured) || product.images.find((im) => im.staged) || product.images[0];
+}
+
 export default function ProductChooser({
   product,
   onSelect,
@@ -17,12 +21,12 @@ export default function ProductChooser({
   onSelect: (id: string) => void;
   onAdd: (id: string, qty: number) => boolean;
 }) {
-  const [image, setImage] = useState(() => Math.max(0, product.images.findIndex((im) => im.staged))),
+  const [image, setImage] = useState(() => product.images.indexOf(featuredImage(product))),
     [zoom, setZoom] = useState(false),
     [added, setAdded] = useState(false);
   const reduce = useReducedMotion();
   useEffect(() => {
-    setImage(Math.max(0, product.images.findIndex((im) => im.staged)));
+    setImage(product.images.indexOf(featuredImage(product)));
     setAdded(false);
   }, [product.id]);
   useEffect(() => {
@@ -56,7 +60,7 @@ export default function ProductChooser({
           >
             <span className="motif-image">
               <img
-                src={`/images/${(p.images.find((im) => im.staged) || p.images[0]).src}-320.webp`}
+                src={`/images/${featuredImage(p).src}-320.webp`}
                 alt=""
                 loading="lazy"
                 width="160"
@@ -82,6 +86,7 @@ export default function ProductChooser({
                 srcSet={`/images/${selectedImage.src}-640.webp 640w, /images/${selectedImage.src}-960.webp 960w, /images/${selectedImage.src}-1440.webp ${selectedImage.staged ? 1122 : 1440}w`}
                 sizes="(max-width: 760px) 100vw, 55vw"
                 alt={selectedImage.alt}
+                style={selectedImage.featured ? { objectPosition: "center top" } : undefined}
                 initial={reduce ? false : { opacity: 0, scale: 1.015 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0 }}

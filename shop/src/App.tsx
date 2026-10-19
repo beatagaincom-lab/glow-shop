@@ -222,8 +222,8 @@ export default function App() {
         <section className="editorial section-shell">
           <Reveal className="editorial-picture">
             <img
-              src="/images/evening-v5-960.webp"
-              srcSet="/images/evening-v5-640.webp 640w, /images/evening-v5-960.webp 960w, /images/evening-v5-1440.webp 1440w"
+              src="/images/evening-v6-960.webp"
+              srcSet="/images/evening-v6-640.webp 640w, /images/evening-v6-960.webp 960w, /images/evening-v6-1440.webp 1440w"
               sizes="(max-width:760px) 100vw, 55vw"
               alt="KI-Alltagsszene: Eine Frau mit Buch und grauer Stars-Decke auf ihrem Sofa"
               width="1536"
