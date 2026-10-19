@@ -39,6 +39,14 @@ export default function App() {
   const first = useRef(true);
   const count = cart.reduce((n, l) => n + l.quantity, 0);
   useEffect(() => {
+    const id = location.hash.slice(1);
+    if (!["decken", "leuchten", "fragen"].includes(id)) return;
+    const frame = requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "instant" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
+  useEffect(() => {
     try {
       localStorage.setItem("glow-bag-v1", JSON.stringify(cart));
     } catch {
