@@ -783,6 +783,13 @@ p {
   height: 100%;
   object-fit: contain;
 }
+.glow-image .night-photo {
+  object-fit: cover;
+  transform: scale(1.4);
+}
+.glow-image .night-stars {
+  transform: scale(1.15);
+}
 .glow-visual > p {
   font-size: 9px;
   color: #c1c8cb;

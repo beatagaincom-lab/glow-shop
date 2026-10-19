@@ -254,6 +254,11 @@ export default function App() {
               <div className="glow-image">
                 <AnimatePresence mode="sync" initial={false}>
                   <motion.img
+                    className={
+                      night
+                        ? `night-photo night-${effectProduct.id}`
+                        : undefined
+                    }
                     key={effectProduct.id + String(night)}
                     initial={reduce ? false : { opacity: 0 }}
                     animate={{ opacity: 1 }}
