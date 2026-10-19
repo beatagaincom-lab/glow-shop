@@ -9,6 +9,7 @@ export default function GlowComparison({ initialProduct }: { initialProduct: str
   const product = products.find(p => p.id === selected)!;
   const scene = product.images.find(image => image.staged)!.src;
   const prefix = selected === "schmetterlinge" ? "butterfly" : selected;
+  const nightScene = selected === "hearts" ? "hearts-night-v2" : `${prefix}-night-v1`;
   const original = product.night || product.images[selected === "hearts" ? 1 : 0].src;
   function moveDivider(event: PointerEvent<HTMLDivElement>) {
     const bounds = event.currentTarget.getBoundingClientRect();
@@ -38,7 +39,7 @@ export default function GlowComparison({ initialProduct }: { initialProduct: str
             onPointerUp={event => { if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId); }}
           >
             <img src={`/images/${scene}-960.webp`} srcSet={`/images/${scene}-640.webp 640w, /images/${scene}-960.webp 960w, /images/${scene}-1440.webp 1122w`} sizes="(max-width: 760px) 92vw, 48vw" width="1122" height="1402" alt={`KI-Wohnszene Flair ${product.name} bei Licht`} loading="lazy" />
-            <img className="comparison-night" style={{clipPath: `inset(0 0 0 ${day}%)`}} src={`/images/${prefix}-night-v1-960.webp`} srcSet={`/images/${prefix}-night-v1-640.webp 640w, /images/${prefix}-night-v1-960.webp 960w, /images/${prefix}-night-v1-1440.webp 1122w`} sizes="(max-width: 760px) 92vw, 48vw" width="1122" height="1402" alt={`KI-Abendvisualisierung Flair ${product.name} mit nachleuchtenden Motiven`} loading="lazy" />
+            <img className="comparison-night" style={{clipPath: `inset(0 0 0 ${day}%)`}} src={`/images/${nightScene}-960.webp`} srcSet={`/images/${nightScene}-640.webp 640w, /images/${nightScene}-960.webp 960w, /images/${nightScene}-1440.webp 1122w`} sizes="(max-width: 760px) 92vw, 48vw" width="1122" height="1402" alt={`KI-Abendvisualisierung Flair ${product.name} mit nachleuchtenden Motiven`} loading="lazy" />
             {day > 12 && <span className="comparison-label label-day"><Sun size={13} />Bei Licht</span>}
             {day < 88 && <span className="comparison-label label-night"><Moon size={13} />Am Abend</span>}
             {day > 0 && day < 100 && <span className="comparison-divider" style={{left: `${day}%`}} aria-hidden="true"><span>↔</span></span>}

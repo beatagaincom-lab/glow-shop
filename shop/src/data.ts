@@ -62,7 +62,7 @@ export const products: Product[] = [
         src: "hearts-glow",
         alt: "Original Flair Hearts mit Leuchteffekt im Bildeinsatz",
       },
-      { src: "hearts-v3", alt: "KI-Wohnszene nach Originalreferenz: Eingekuschelt in Hearts", staged: true },
+      { src: "hearts-v4", alt: "KI-Wohnszene nach Originalreferenz: Eingekuschelt in Hearts", staged: true },
     ],
   },
   {

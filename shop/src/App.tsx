@@ -222,8 +222,8 @@ export default function App() {
         <section className="editorial section-shell">
           <Reveal className="editorial-picture">
             <img
-              src="/images/evening-v3-960.webp"
-              srcSet="/images/evening-v3-640.webp 640w, /images/evening-v3-960.webp 960w, /images/evening-v3-1440.webp 1440w"
+              src="/images/evening-v4-960.webp"
+              srcSet="/images/evening-v4-640.webp 640w, /images/evening-v4-960.webp 960w, /images/evening-v4-1440.webp 1440w"
               sizes="(max-width:760px) 100vw, 55vw"
               alt="Inszenierte Wohnszene: Eine Frau liest auf dem Sofa unter der grauen Stars-Decke"
               width="1536"

@@ -893,6 +893,7 @@ p {
 .editorial-picture img {
   border-radius: 7px;
   width: 100%;
+  height: auto;
   aspect-ratio: 1.2;
   object-fit: cover;
   object-position: 65% 50%;
@@ -1701,7 +1702,7 @@ fieldset.cart-lines {
   }
   .editorial-picture img {
     aspect-ratio: 1.1;
-    object-position: 62% center;
+    object-position: 82% center;
   }
   .editorial-picture > span {
     font-size: 8px;
