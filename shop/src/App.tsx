@@ -3,7 +3,6 @@ import {
   ShoppingBag,
   Menu,
   X,
-  Sun,
   Moon,
   ArrowDown,
   ArrowUpRight,
@@ -21,6 +20,7 @@ import {
 import ProductChooser from "./ProductChooser";
 import Cart from "./Cart";
 import CheckoutResult from "./CheckoutResult";
+import GlowComparison from "./GlowComparison";
 
 export default function App() {
   const [selected, setSelected] = useState(() => {
@@ -31,17 +31,11 @@ export default function App() {
     [cart, setCart] = useState<CartLine[]>(readCart),
     [bagOpen, setBagOpen] = useState(false),
     [menuOpen, setMenuOpen] = useState(false),
-    [night, setNight] = useState(false),
-    [nightProduct, setNightProduct] = useState(() => {
-      const id = new URLSearchParams(location.search).get("motiv");
-      return products.some((p) => p.id === id) ? id! : "stars";
-    }),
     [info, setInfo] = useState(""),
     [toast, setToast] = useState(""),
     [inShop, setInShop] = useState(false);
   const reduce = useReducedMotion(),
-    product = products.find((p) => p.id === selected)!,
-    effectProduct = products.find((p) => p.id === nightProduct)!;
+    product = products.find((p) => p.id === selected)!;
   const first = useRef(true);
   const count = cart.reduce((n, l) => n + l.quantity, 0);
   useEffect(() => {
@@ -118,7 +112,7 @@ export default function App() {
   function select(id: string) {
     setSelected(id);
     setQuantity(1);
-    setNightProduct(id);
+
     const url = new URL(location.href);
     url.searchParams.set("motiv", id);
     history.replaceState({}, "", url);
@@ -224,90 +218,7 @@ export default function App() {
           onSelect={select}
           onAdd={add}
         />
-        <section
-          id="leuchten"
-          className={`glow-section ${night ? "is-night" : ""}`}
-          aria-labelledby="glow-title"
-        >
-          <div className="glow-inner section-shell">
-            <Reveal className="glow-copy">
-              <span className="section-number">
-                02 / EIN KLEINES BISSCHEN MAGIE
-              </span>
-              <h2 id="glow-title">
-                Mach den
-                <br />
-                <em>Abend an.</em>
-              </h2>
-              <p>
-                Am Tag kuschelig.
-                <br />
-                Im Dunkeln besonders.
-              </p>
-              <div className="day-night" role="group" aria-label="Lichtansicht">
-                <span className={`switch-track ${night ? "at-night" : ""}`} />
-                <button aria-pressed={!night} onClick={() => setNight(false)}>
-                  <Sun size={18} />
-                  Tag
-                </button>
-                <button aria-pressed={night} onClick={() => setNight(true)}>
-                  <Moon size={17} />
-                  Nacht
-                </button>
-              </div>
-              <p className="glow-explainer">
-                Die Motive leuchten im Dunkeln sanft nach.
-                <br />
-                Entdecke die Ansichten des Herstellers.
-              </p>
-              <div
-                className="effect-motifs"
-                aria-label="Motiv für Leuchtansicht"
-              >
-                {products.map((p) => (
-                    <button
-                      key={p.id}
-                      aria-pressed={nightProduct === p.id}
-                      onClick={() => setNightProduct(p.id)}
-                    >
-                      {p.name}
-                    </button>
-                  ))}
-              </div>
-            </Reveal>
-            <div className="glow-visual">
-              <div className="glow-image">
-                <AnimatePresence mode="sync" initial={false}>
-                  <motion.img
-                    className={
-                      night && effectProduct.night
-                        ? `night-photo night-${effectProduct.id}`
-                        : undefined
-                    }
-                    key={effectProduct.id + String(night)}
-                    initial={reduce ? false : { opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: reduce ? 0 : 0.7 }}
-                    src={`/images/${night && effectProduct.night ? effectProduct.night : effectProduct.images[night && effectProduct.id === "hearts" ? 1 : 0].src}-960.webp`}
-                    alt={`${night && effectProduct.night ? "Leuchtansicht" : "Originalansicht mit Leuchteinsatz"} Flair ${effectProduct.name}, Originalbild des Herstellers`}
-                    width="960"
-                    height="760"
-                    loading="lazy"
-                  />
-                </AnimatePresence>
-              </div>
-              <p>
-                {night ? (effectProduct.night ? "Leuchtansicht" : "Originalbild mit Leuchteinsatz") : "Tagesansicht"} des Herstellers ·{" "}
-                {effectProduct.name}
-                <span>
-                  Helligkeit und Dauer hängen von den Lichtbedingungen ab.
-                  {night && !effectProduct.night && " Für dieses Motiv liegt keine separate Nachtaufnahme vor."}
-                </span>
-              </p>
-            </div>
-          </div>
-        </section>
+        <GlowComparison key={selected} initialProduct={selected} />
         <section className="editorial section-shell">
           <Reveal className="editorial-picture">
             <img

@@ -765,6 +765,85 @@ p {
   color: var(--ivory);
   border-color: var(--butter);
 }
+.comparison-visual { width: 100%; max-width: 560px; justify-self: center; }
+.comparison-frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #18232d;
+  isolation: isolate;
+  touch-action: pan-y;
+  user-select: none;
+  cursor: ew-resize;
+}
+.comparison-frame > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+.comparison-label {
+  position: absolute;
+  top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 11px;
+  border-radius: 20px;
+  color: #fff;
+  background: #17202bc9;
+  font-size: 11px;
+  pointer-events: none;
+}
+.label-day { left: 14px; }
+.label-night { right: 14px; }
+.comparison-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #fff9;
+  pointer-events: none;
+}
+.comparison-divider > span {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  background: #f1ebcbe8;
+  color: #1c2830;
+  border-radius: 50%;
+}
+.comparison-control { padding-top: 19px; }
+.comparison-control label, .comparison-endpoints {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+  color: #e9e8de;
+}
+.comparison-control label span, .comparison-endpoints { color: #aebbc2; font-size: 11px; }
+.comparison-control input {
+  display: block;
+  width: 100%;
+  height: 44px;
+  margin: 2px 0;
+  accent-color: #eee5b5;
+  cursor: ew-resize;
+}
+.comparison-visual > p.comparison-caption { font-size: 12px; margin-top: 21px; }
+.comparison-visual > p.comparison-caption span { font-size: 11px; line-height: 1.65; margin-top: 5px; color: #b2bdc6; }
+.effect-original { margin-top: 18px; border-top: 1px solid #ffffff30; color: #cbd4da; }
+.effect-original summary { cursor: pointer; padding: 16px 0; font-size: 12px; line-height: 1.5; }
+.effect-original img { display: block; width: 100%; max-height: 420px; height: auto; object-fit: contain; background: #fff; border-radius: 6px; }
+.effect-original p { font-size: 11px; line-height: 1.6; padding-top: 10px; }
 .glow-image {
   position: relative;
   aspect-ratio: 1.2;
