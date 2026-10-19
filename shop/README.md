@@ -25,7 +25,7 @@ This is a test storefront at CHF 59.90 per blanket. The merchant confirmed free 
 
 Confirm the exact legal merchant name, tax treatment, available stock, return policy, delivery process and image usage rights. Add complete legal/privacy information. Replace the deliberate test-only gate only after the correct live account is configured. The sandbox webhook verifies Stripe signatures and writes canonical paid test orders to Supabase with idempotency; it never triggers fulfillment. A success-page visit is never a fulfillment trigger. Do not enable real payments with the current test-only backend.
 
-Supabase project `wmsusxvxpkxnefnxqspn` has a private, RLS-enabled `glow_orders` table for sandbox webhook verification. Service credentials belong only in encrypted Vercel Preview variables. Production inventory, fulfillment access, receipts, returns and refunds still need a defined workflow.
+Supabase project `qvcarifkppszjvlhrndn` has a private, RLS-enabled `glow_orders` table for sandbox webhook verification. Service credentials belong only in encrypted Vercel Preview variables. The current Vercel connector cannot manage this team, so the Supabase URL and service key are not yet configured in Preview. Production inventory, fulfillment access, receipts, returns and refunds still need a defined workflow.
 
 The preview is excluded from search indexing. Remove preview labels and indexing restrictions only at the agreed launch. Connect the chosen subdomain of bettundbad.ch after DNS and deployment decisions are finalized.
 
