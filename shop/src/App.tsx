@@ -71,12 +71,10 @@ export default function App() {
   function goShop() {
     setMenuOpen(false);
     setBagOpen(false);
-    document
-      .getElementById("decken")
-      ?.scrollIntoView({
-        behavior: reduce ? "instant" : "smooth",
-        block: "start",
-      });
+    document.getElementById("decken")?.scrollIntoView({
+      behavior: reduce ? "instant" : "smooth",
+      block: "start",
+    });
   }
   function add(id: string, quantity = 1) {
     setCart((old) => {
@@ -145,10 +143,7 @@ export default function App() {
             <h1>
               Der Tag geht.
               <br />
-              <em>
-                Das Leuchten
-                <br className="desktop-break" /> bleibt.
-              </em>
+              <em>Das Leuchten bleibt.</em>
             </h1>
             <p>
               Weiche Kuscheldecken, die im Dunkeln
