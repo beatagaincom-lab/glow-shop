@@ -293,8 +293,8 @@ export default function App() {
                 GLOW ist aktuell in Vorbereitung. Du kannst alle Motive ansehen
                 und deine Tasche zusammenstellen. Du kannst den Kauf mit Stripe
                 im Testmodus ausprobieren. Dabei erfolgt keine echte Zahlung und
-                keine Lieferung. Verbindliche Preise, Versand- und
-                Rückgabebedingungen ergänzen wir vor dem Start.
+                keine Lieferung. Der Preis beträgt CHF 59.90 pro Decke.
+                Versand- und Rückgabebedingungen ergänzen wir vor dem Start.
               </p>
             </Accordion>
           </div>
@@ -456,8 +456,8 @@ export default function App() {
             </p>
             <p>
               Der Shop ist eine Vorschau. Stripe ist im Testmodus angebunden.
-              Verbindliche Preis-, Versand- und Anbieterangaben werden vor dem
-              Verkaufsstart ergänzt.
+              Der Preis beträgt CHF 59.90 pro Decke. Versand- und Anbieterangaben
+              werden vor dem Verkaufsstart vervollständigt.
             </p>
           </>
         )}

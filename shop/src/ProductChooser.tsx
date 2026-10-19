@@ -132,7 +132,7 @@ export default function ProductChooser({
           <h3>Flair {product.name}</h3>
           <p className="product-subtitle">{product.subtitle}</p>
           <div className="price">{money(PRICE)}</div>
-          <div className="price-note">Vorschaupreis · Testkauf möglich</div>
+          <div className="price-note">Preis pro Decke · Aktuell nur Testkäufe</div>
           <p className="delivery-estimate">Geplante Lieferzeit zum Verkaufsstart: ca. 4 Tage.</p>
           <div className="specs">
             <span>150 × 200 cm</span>
