@@ -133,7 +133,7 @@ export default function ProductChooser({
           <p className="product-subtitle">{product.subtitle}</p>
           <div className="price">{money(PRICE)}</div>
           <div className="price-note">Preis pro Decke · Aktuell nur Testkäufe</div>
-          <p className="delivery-estimate">Geplante Lieferzeit zum Verkaufsstart: ca. 4 Tage.</p>
+          <p className="delivery-estimate">Kostenloser Versand in der Schweiz · geplante Lieferung in ca. 4 Tagen.</p>
           <div className="specs">
             <span>150 × 200 cm</span>
             <span>100 % Polyester · 280 g/m²</span>
@@ -163,9 +163,10 @@ export default function ProductChooser({
           </Accordion>
           <Accordion title="Lieferung & Rückgabe">
             <p>
-              Für den Verkaufsstart ist eine Lieferzeit von ca. 4 Tagen vorgesehen.
-              Versandkosten und Rückgabeinformationen werden vor dem Verkaufsstart
-              verbindlich ergänzt. Testkäufe lösen keine Lieferung aus.
+              Für den Verkaufsstart sind kostenloser Versand innerhalb der Schweiz
+              und eine Lieferzeit von ca. 4 Tagen vorgesehen. Die Rückgaberegeln
+              werden vor dem Verkaufsstart verbindlich ergänzt. Testkäufe lösen
+              keine Lieferung aus.
             </p>
           </Accordion>
         </div>

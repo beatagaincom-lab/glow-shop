@@ -123,7 +123,7 @@ export default function Cart({
               <span>Zwischensumme</span>
               <strong>{money(total)}</strong>
             </div>
-            <p>Testversand CHF 0.00. Keine echte Zahlung oder Lieferung.</p>
+            <p>Kostenloser Versand in der Schweiz · Testkauf ohne Lieferung.</p>
             <div className="checkout-notice">
               <LockKeyhole size={17} />
               <span>Bett und Bad Sandbox · Nur Testdaten verwenden.</span>

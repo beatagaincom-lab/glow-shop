@@ -1,1 +1,4 @@
 .vercel
+supabase/.temp/
+.playwright-cli/
+output/playwright/

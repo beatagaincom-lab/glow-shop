@@ -294,7 +294,8 @@ export default function App() {
                 und deine Tasche zusammenstellen. Du kannst den Kauf mit Stripe
                 im Testmodus ausprobieren. Dabei erfolgt keine echte Zahlung und
                 keine Lieferung. Der Preis beträgt CHF 59.90 pro Decke.
-                Versand- und Rückgabebedingungen ergänzen wir vor dem Start.
+                Versand in der Schweiz ist für den geplanten Start kostenlos;
+                die Rückgaberegeln ergänzen wir vor dem Start.
               </p>
             </Accordion>
           </div>
@@ -456,8 +457,9 @@ export default function App() {
             </p>
             <p>
               Der Shop ist eine Vorschau. Stripe ist im Testmodus angebunden.
-              Der Preis beträgt CHF 59.90 pro Decke. Versand- und Anbieterangaben
-              werden vor dem Verkaufsstart vervollständigt.
+              Der Preis beträgt CHF 59.90 pro Decke. Der geplante Versand in der
+              Schweiz ist kostenlos; Anbieterangaben werden vor dem Verkaufsstart
+              vervollständigt.
             </p>
           </>
         )}

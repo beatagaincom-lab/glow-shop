@@ -78,7 +78,7 @@ export const products: Product[] = [
         alt: "Original Flair Raket mit Weltraummotiven und Leuchteinsatz",
       },
       { src: "raket-v3", alt: "KI-Wohnszene nach Originalreferenz: Raket in der Leseecke", staged: true },
-      { src: "raket-child-v2", alt: "KI-Familienszene nach Produktreferenz: Junge mit Raket-Decke auf dem Sofa", staged: true, featured: true },
+      { src: "raket-child-v3", alt: "KI-Wohnszene nach Produktreferenz: Junge liest eingekuschelt mit der Raket-Decke", staged: true, featured: true },
     ],
   },
   {

@@ -1144,6 +1144,9 @@ p {
   object-fit: cover;
   object-position: center 48%;
 }
+.product-main-image.is-editorial {
+  aspect-ratio: 1.05;
+}
 .thumbnails button { position: relative; }
 .thumbnail-label {
   position: absolute;

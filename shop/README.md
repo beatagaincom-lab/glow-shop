@@ -19,13 +19,13 @@ Add the Bett und Bad **sandbox** secret to `.env.local` and set `CHECKOUT_ENABLE
 
 Vercel root directory: `shop`. Framework: Vite. Build: `npm run build`. Output: `dist`. The `api` directory contains Vercel Node functions. Set server-only preview environment variables `STRIPE_SECRET_KEY`, `STRIPE_MODE=test`, `CHECKOUT_ENABLED=true`. The deployment URL is used automatically for checkout return URLs; use `APP_URL` only for a fixed canonical origin.
 
-This is a test storefront, with a provisional CHF 59.90 price and zero-cost test shipping. No real purchase, shipping or fulfillment occurs. The sandbox session keeps the bag for further testing. Use only synthetic customer data and Stripe test cards.
+This is a test storefront at CHF 59.90 per blanket. The merchant confirmed free shipping in Switzerland and a planned delivery time of about four days; checkout remains in Stripe test mode and does not ship anything. Use only synthetic customer data and Stripe test cards.
 
 ## Before commercial launch
 
-Confirm merchant details, final tax-inclusive price, shipping charges, stock, delivery/returns and image usage rights. Add complete legal/privacy information. Replace the deliberate test-only gate only after the correct live account is configured. Implement signature-verified Stripe webhooks with durable, idempotent order processing before fulfillment, including asynchronous payment outcomes. A success-page visit is never a fulfillment trigger. Do not enable real payments with the current test-only backend.
+Confirm the exact legal merchant name, tax treatment, available stock, return policy, delivery process and image usage rights. Add complete legal/privacy information. Replace the deliberate test-only gate only after the correct live account is configured. The sandbox webhook verifies Stripe signatures and writes canonical paid test orders to Supabase with idempotency; it never triggers fulfillment. A success-page visit is never a fulfillment trigger. Do not enable real payments with the current test-only backend.
 
-No database is required for this catalog and sandbox demonstration. For production inventory, fulfillment and order status, use a durable order store (for example Supabase) and restrict access server-side. Stripe remains the payment source of truth. No database or Supabase project has been provisioned yet.
+Supabase project `wmsusxvxpkxnefnxqspn` has a private, RLS-enabled `glow_orders` table for sandbox webhook verification. Service credentials belong only in encrypted Vercel Preview variables. Production inventory, fulfillment access, receipts, returns and refunds still need a defined workflow.
 
 The preview is excluded from search indexing. Remove preview labels and indexing restrictions only at the agreed launch. Connect the chosen subdomain of bettundbad.ch after DNS and deployment decisions are finalized.
 
@@ -40,9 +40,9 @@ Product and glow images come from the supplied Kremer catalog. The current edito
 - Excess quantities are rejected with an explicit message instead of silently clamping the added quantity.
 - Checkout controls freeze during a request; duplicate clicks are blocked. Retrying an unchanged cart uses the same Stripe idempotency key. Network errors and a 60-second timeout leave the bag available.
 - Cancelling Stripe reopens the saved bag and keeps the purchased motif context.
-- The merchant confirmed an approximate four-day delivery estimate for launch. Shipping fees, returns, inventory and tax details remain unresolved.
+- The merchant confirmed free shipping within Switzerland and an approximate four-day delivery estimate for launch. Return policy, stock and tax treatment remain unresolved.
 - The Stripe connector now exposes the correct Bett und Bad live account. Its read-only implementation planner confirmed hosted one-time Checkout. The storefront still uses its separate sandbox; no live charges or resources were created.
-- `glow.bettundbad.ch` is assigned to the Vercel project. Vercel currently requests an A record for `glow` pointing to `76.76.21.21` at Hostpoint. DNS has not been changed. Re-inspect Vercel's domain requirements before launch; preserve existing root-domain and email records.
+- `glow.bettundbad.ch` is assigned to the Vercel project. Hostpoint DNS resolves to `76.76.21.21` and HTTPS works. The domain still serves an older production build; the latest preview must pass review before any production deployment.
 - Vercel still requires a GitHub Login Connection before automatic repository deployments can be connected. Preview deployments are performed through the CLI.
 
 ## Interaction design
