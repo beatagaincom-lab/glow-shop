@@ -23,11 +23,14 @@
     <meta property="og:type" content="website" />
     <meta property="og:image" content="/images/hero-960.webp" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preload" as="image" href="/images/hero-960.webp" />
+    <link rel="preload" as="image" href="/images/hero-960.webp"
+      imagesrcset="/images/hero-640.webp 640w, /images/hero-960.webp 960w, /images/hero-1440.webp 1440w"
+      imagesizes="(max-width:760px) 100vw, 50vw" />
     <title>GLOW — Decken für deinen Abend | Bett & Bad</title>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>Bitte aktiviere JavaScript, um die GLOW-Decken auszuwählen und die Tasche zu verwenden. Du erreichst uns auch auf <a href="https://www.bettundbad.ch/">bettundbad.ch</a>.</noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -4,7 +4,7 @@ export type Product = {
   name: string;
   subtitle: string;
   color: string;
-  images: { src: string; alt: string }[];
+  images: { src: string; alt: string; staged?: boolean }[];
   night?: string;
 };
 export const PRICE = 5990;
@@ -60,6 +60,7 @@ export const products: Product[] = [
         src: "hearts-glow",
         alt: "Original Flair Hearts mit Leuchteffekt im Bildeinsatz",
       },
+      { src: "hearts-editorial", alt: "KI-inszenierte Wohnszene nach Produktreferenz: Flair Hearts auf einem Sessel im Nachmittagslicht", staged: true },
     ],
   },
   {
@@ -73,6 +74,7 @@ export const products: Product[] = [
         src: "raket-room",
         alt: "Original Flair Raket mit Weltraummotiven und Leuchteinsatz",
       },
+      { src: "raket-editorial", alt: "KI-inszenierte Wohnszene nach Produktreferenz: Flair Raket auf einem Tagesbett im Abendlicht", staged: true },
     ],
   },
   {
@@ -94,6 +96,7 @@ export const products: Product[] = [
         src: "butterfly-pack",
         alt: "Original Flair Schmetterlinge mit Verpackungsbanderole",
       },
+      { src: "butterfly-editorial", alt: "KI-inszenierte Wohnszene nach Produktreferenz: Lesen unter der Schmetterlingsdecke", staged: true },
     ],
     night: "butterfly-night",
   },

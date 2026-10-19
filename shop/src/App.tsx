@@ -23,13 +23,19 @@ import Cart from "./Cart";
 import CheckoutResult from "./CheckoutResult";
 
 export default function App() {
-  const [selected, setSelected] = useState("stars"),
+  const [selected, setSelected] = useState(() => {
+      const id = new URLSearchParams(location.search).get("motiv");
+      return products.some((p) => p.id === id) ? id! : "stars";
+    }),
     [quantity, setQuantity] = useState(1),
     [cart, setCart] = useState<CartLine[]>(readCart),
     [bagOpen, setBagOpen] = useState(false),
     [menuOpen, setMenuOpen] = useState(false),
     [night, setNight] = useState(false),
-    [nightProduct, setNightProduct] = useState("stars"),
+    [nightProduct, setNightProduct] = useState(() => {
+      const id = new URLSearchParams(location.search).get("motiv");
+      return products.some((p) => p.id === id) ? id! : "stars";
+    }),
     [info, setInfo] = useState(""),
     [toast, setToast] = useState(""),
     [inShop, setInShop] = useState(false);
@@ -39,7 +45,7 @@ export default function App() {
   const first = useRef(true);
   const count = cart.reduce((n, l) => n + l.quantity, 0);
   useEffect(() => {
-    const id = location.hash.slice(1);
+    const id = location.hash.slice(1) || (new URLSearchParams(location.search).has("motiv") ? "decken" : "");
     if (!["decken", "leuchten", "fragen"].includes(id)) return;
     const frame = requestAnimationFrame(() => {
       document.getElementById(id)?.scrollIntoView({ behavior: "instant" });
@@ -72,8 +78,12 @@ export default function App() {
     if (first.current) {
       first.current = false;
       const params = new URLSearchParams(location.search);
-      if (params.get("checkout") === "cancelled")
+      if (params.get("checkout") === "cancelled") {
         setToast("Deine Tasche ist noch da. Nimm dir Zeit.");
+        setBagOpen(true);
+        params.delete("checkout");
+        history.replaceState({}, "", `${location.pathname}${params.size ? `?${params}` : ""}${location.hash}`);
+      }
     }
   }, []);
   function goShop() {
@@ -85,6 +95,11 @@ export default function App() {
     });
   }
   function add(id: string, quantity = 1) {
+    const existing = cart.find((l) => l.id === id)?.quantity || 0;
+    if (existing + quantity > 10) {
+      setToast(`Maximal 10 Decken je Motiv. In deiner Tasche sind bereits ${existing}.`);
+      return false;
+    }
     setCart((old) => {
       const line = old.find((l) => l.id === id);
       return line
@@ -98,12 +113,15 @@ export default function App() {
     setToast(
       `Flair ${products.find((p) => p.id === id)?.name} ist in deiner Tasche.`,
     );
+    return true;
   }
   function select(id: string) {
     setSelected(id);
     setQuantity(1);
-    const p = products.find((p) => p.id === id)!;
-    if (p.night) setNightProduct(id);
+    setNightProduct(id);
+    const url = new URL(location.href);
+    url.searchParams.set("motiv", id);
+    history.replaceState({}, "", url);
   }
   return (
     <>
@@ -192,6 +210,7 @@ export default function App() {
               <i />
               <span>{money(PRICE)}</span>
             </div>
+            <p className="scene-label">KI-inszenierte Wohnszene · Originalbilder in der Auswahl</p>
           </div>
         </section>
         <div className="quiet-divider">
@@ -245,9 +264,7 @@ export default function App() {
                 className="effect-motifs"
                 aria-label="Motiv für Leuchtansicht"
               >
-                {products
-                  .filter((p) => p.night)
-                  .map((p) => (
+                {products.map((p) => (
                     <button
                       key={p.id}
                       aria-pressed={nightProduct === p.id}
@@ -263,7 +280,7 @@ export default function App() {
                 <AnimatePresence mode="sync" initial={false}>
                   <motion.img
                     className={
-                      night
+                      night && effectProduct.night
                         ? `night-photo night-${effectProduct.id}`
                         : undefined
                     }
@@ -272,8 +289,8 @@ export default function App() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: reduce ? 0 : 0.7 }}
-                    src={`/images/${night ? effectProduct.night : effectProduct.images[0].src}-960.webp`}
-                    alt={`${night ? "Leuchtansicht" : "Tagesansicht"} Flair ${effectProduct.name}, Originalbild des Herstellers`}
+                    src={`/images/${night && effectProduct.night ? effectProduct.night : effectProduct.images[night && effectProduct.id === "hearts" ? 1 : 0].src}-960.webp`}
+                    alt={`${night && effectProduct.night ? "Leuchtansicht" : "Originalansicht mit Leuchteinsatz"} Flair ${effectProduct.name}, Originalbild des Herstellers`}
                     width="960"
                     height="760"
                     loading="lazy"
@@ -281,10 +298,11 @@ export default function App() {
                 </AnimatePresence>
               </div>
               <p>
-                {night ? "Leuchtansicht" : "Tagesansicht"} des Herstellers ·{" "}
+                {night ? (effectProduct.night ? "Leuchtansicht" : "Originalbild mit Leuchteinsatz") : "Tagesansicht"} des Herstellers ·{" "}
                 {effectProduct.name}
                 <span>
                   Helligkeit und Dauer hängen von den Lichtbedingungen ab.
+                  {night && !effectProduct.night && " Für dieses Motiv liegt keine separate Nachtaufnahme vor."}
                 </span>
               </p>
             </div>
@@ -301,7 +319,7 @@ export default function App() {
               height="1024"
               loading="lazy"
             />
-            <span>Inszenierte Wohnwelt</span>
+            <span>KI-inszenierte Wohnwelt</span>
           </Reveal>
           <Reveal className="editorial-copy">
             <Spark />

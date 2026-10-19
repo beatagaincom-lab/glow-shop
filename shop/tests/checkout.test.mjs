@@ -1,8 +1,15 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { validateCart, price } from "../server/catalog.mjs";
-import checkout from "../api/checkout.mjs";
+import checkout, { checkoutKey } from "../api/checkout.mjs";
 import { getStripe } from "../server/stripe.mjs";
+test("checkout retries share a key, changed carts cannot reuse that operation", () => {
+  const id = "12345678-1234-4234-8234-123456789abc";
+  const cart = [{ id: "stars", quantity: 1 }, { id: "hearts", quantity: 2 }];
+  assert.equal(checkoutKey(cart, id), checkoutKey([...cart].reverse(), id));
+  assert.notEqual(checkoutKey(cart, id), checkoutKey([{ id: "stars", quantity: 2 }], id));
+  assert.throws(() => checkoutKey(cart, "invalid"));
+});
 test("server accepts only known products and owns prices", () => {
   assert.deepEqual(
     validateCart({ items: [{ id: "stars", quantity: 2, price: 1 }] }),

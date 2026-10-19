@@ -31,7 +31,10 @@ export default function CheckoutResult() {
   }, [open, attempt]);
   function close() {
     setOpen(false);
-    history.replaceState({}, "", location.pathname);
+    const url = new URL(location.href);
+    url.searchParams.delete("checkout");
+    url.searchParams.delete("session_id");
+    history.replaceState({}, "", url);
   }
   return (
     <Modal

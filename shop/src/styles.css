@@ -1053,6 +1053,40 @@ p {
   min-width: 22px;
   font-size: 10px;
 }
+.scene-label {
+  text-align: center;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 12px 0 0;
+}
+.product-main-image.is-editorial > img {
+  object-fit: cover;
+  object-position: center 48%;
+}
+.thumbnails button { position: relative; }
+.thumbnail-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #202c35;
+  color: #fff;
+  font-size: 8px;
+  padding: 3px 1px;
+}
+.delivery-estimate {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 12px 0;
+}
+fieldset.cart-lines {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
 .cart-line-right {
   display: flex;
   flex-direction: column;

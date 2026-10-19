@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { ShoppingBag, Trash2, LockKeyhole, Check } from "lucide-react";
 import { type CartLine, products, PRICE, money } from "./data";
 import { GlowButton, Modal, Quantity } from "./components";
@@ -20,16 +20,26 @@ export default function Cart({
   const [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   const total = lines.reduce((n, l) => n + l.quantity * PRICE, 0);
+  const pending = useRef(false);
+  const request = useRef({ cart: "", id: "" });
   async function checkout() {
+    if (pending.current) return;
+    pending.current = true;
     setBusy(true);
     setError("");
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 60000);
     try {
+      const cart = JSON.stringify(lines);
+      if (request.current.cart !== cart)
+        request.current = { cart, id: crypto.randomUUID() };
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: lines }),
+        body: JSON.stringify({ items: lines, requestId: request.current.id }),
+        signal: controller.signal,
       });
-      const body = await response.json();
+      const body = await response.json().catch(() => ({ message: "Der Checkout antwortet gerade nicht. Bitte versuche es erneut." }));
       if (!response.ok)
         throw new Error(
           body.message ||
@@ -41,11 +51,17 @@ export default function Cart({
       window.location.assign(url.href);
     } catch (e) {
       setError(
-        e instanceof Error
+        e instanceof Error && e.name === "AbortError"
+          ? "Die Verbindung dauert zu lange. Deine Tasche bleibt gespeichert. Bitte versuche es erneut."
+          : e instanceof TypeError
+          ? "Keine Verbindung zum Checkout. Bitte prüfe deine Internetverbindung und versuche es erneut. Deine Tasche bleibt gespeichert."
+          : e instanceof Error
           ? e.message
           : "Der Checkout konnte nicht geöffnet werden.",
       );
     } finally {
+      clearTimeout(timeout);
+      pending.current = false;
       setBusy(false);
     }
   }
@@ -68,7 +84,7 @@ export default function Cart({
         </div>
       ) : (
         <>
-          <div className="cart-lines">
+          <fieldset className="cart-lines" disabled={busy} aria-label="Artikel in deiner Tasche">
             {lines.map((line) => {
               const p = products.find((p) => p.id === line.id)!;
               return (
@@ -101,7 +117,7 @@ export default function Cart({
                 </article>
               );
             })}
-          </div>
+          </fieldset>
           <div className="cart-summary">
             <div>
               <span>Zwischensumme</span>

@@ -31,7 +31,19 @@ The preview is excluded from search indexing. Remove preview labels and indexing
 
 ## Images
 
-Product gallery and glow images come from the supplied Kremer catalog. Two editorial scenes were generated using the actual Stars blanket as reference; they are labelled as staged scenes. Manufacturer photos remain authoritative for pattern, color and light effect. Generated scenes do not establish glow intensity or duration. Raw B2B data, purchasing information, source archives and design drafts are intentionally excluded from this repository.
+Product and glow images come from the supplied Kremer catalog. Five editorial scenes use the actual Stars, Hearts, Raket and Schmetterlinge blankets as references. The three new portrait scenes are 1122 × 1402 pixels at source, served as responsive WebP without enlargement. Generated gallery images are explicitly labelled as AI lifestyle scenes; manufacturer photos remain authoritative for pattern, color and light effect. The butterfly scene was revised against two real references to reduce pattern drift. These are illustrative scenes, not exact product photography or evidence of glow intensity. Raw B2B data, purchasing information, source archives and design drafts are excluded from this repository.
+
+## Review updates — 19 October 2026
+
+- Product links support `?motiv=hearts#decken` (also stars, unicorn, raket, schmetterlinge). Selecting a motif updates the address without a reload.
+- All five products are represented in the light comparison. Hearts and Raket use the original inset comparison and disclose that no standalone night photograph is available.
+- Excess quantities are rejected with an explicit message instead of silently clamping the added quantity.
+- Checkout controls freeze during a request; duplicate clicks are blocked. Retrying an unchanged cart uses the same Stripe idempotency key. Network errors and a 60-second timeout leave the bag available.
+- Cancelling Stripe reopens the saved bag and keeps the purchased motif context.
+- The merchant confirmed an approximate four-day delivery estimate for launch. Shipping fees, returns, inventory and tax details remain unresolved.
+- The Stripe connector now exposes the correct Bett und Bad live account. Its read-only implementation planner confirmed hosted one-time Checkout. The storefront still uses its separate sandbox; no live charges or resources were created.
+- `glow.bettundbad.ch` is assigned to the Vercel project. Vercel currently requests an A record for `glow` pointing to `76.76.21.21` at Hostpoint. DNS has not been changed. Re-inspect Vercel's domain requirements before launch; preserve existing root-domain and email records.
+- Vercel still requires a GitHub Login Connection before automatic repository deployments can be connected. Preview deployments are performed through the CLI.
 
 ## Interaction design
 

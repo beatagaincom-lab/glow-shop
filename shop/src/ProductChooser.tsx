@@ -15,7 +15,7 @@ export default function ProductChooser({
   onQuantity: (n: number) => void;
   product: Product;
   onSelect: (id: string) => void;
-  onAdd: (id: string, qty: number) => void;
+  onAdd: (id: string, qty: number) => boolean;
 }) {
   const [image, setImage] = useState(0),
     [zoom, setZoom] = useState(false),
@@ -74,12 +74,12 @@ export default function ProductChooser({
       </div>
       <div className="product-layout">
         <div className="product-gallery">
-          <div className="product-main-image">
+          <div className={`product-main-image ${selectedImage.staged ? "is-editorial" : ""}`}>
             <AnimatePresence mode="sync" initial={false}>
               <motion.img
                 key={selectedImage.src}
                 src={`/images/${selectedImage.src}-960.webp`}
-                srcSet={`/images/${selectedImage.src}-640.webp 640w, /images/${selectedImage.src}-960.webp 960w, /images/${selectedImage.src}-1440.webp 1440w`}
+                srcSet={`/images/${selectedImage.src}-640.webp 640w, /images/${selectedImage.src}-960.webp 960w, /images/${selectedImage.src}-1440.webp ${selectedImage.staged ? 1122 : 1440}w`}
                 sizes="(max-width: 760px) 100vw, 55vw"
                 alt={selectedImage.alt}
                 initial={reduce ? false : { opacity: 0, scale: 1.015 }}
@@ -97,7 +97,7 @@ export default function ProductChooser({
             >
               <Expand size={19} />
             </button>
-            <span className="image-origin">Original-Produktfotografie</span>
+            <span className="image-origin">{selectedImage.staged ? "KI-Wohnszene · nach Originalreferenz" : "Original-Produktfotografie"}</span>
           </div>
           <div className="thumbnails" aria-label="Produktbilder">
             {product.images.map((im, i) => (
@@ -114,6 +114,7 @@ export default function ProductChooser({
                   width="100"
                   height="75"
                 />
+                {im.staged && <span className="thumbnail-label">Wohnszene</span>}
               </button>
             ))}
             <span className="gallery-count">
@@ -127,6 +128,7 @@ export default function ProductChooser({
           <p className="product-subtitle">{product.subtitle}</p>
           <div className="price">{money(PRICE)}</div>
           <div className="price-note">Vorschaupreis · Testkauf möglich</div>
+          <p className="delivery-estimate">Geplante Lieferzeit zum Verkaufsstart: ca. 4 Tage.</p>
           <div className="specs">
             <span>150 × 200 cm</span>
             <span>100 % Polyester · 280 g/m²</span>
@@ -136,8 +138,7 @@ export default function ProductChooser({
             <Quantity value={quantity} onChange={onQuantity} />
             <GlowButton
               onClick={() => {
-                onAdd(product.id, quantity);
-                setAdded(true);
+                setAdded(onAdd(product.id, quantity));
               }}
               className={added ? "is-added" : ""}
             >
@@ -145,7 +146,7 @@ export default function ProductChooser({
             </GlowButton>
           </div>
           <p className="purchase-note">
-            Dein Motiv bleibt gespeichert. Ganz ohne Konto.
+            Deine Tasche bleibt gespeichert. Ganz ohne Konto.
           </p>
           <Accordion title="Material & Pflege">
             <p>
@@ -157,9 +158,9 @@ export default function ProductChooser({
           </Accordion>
           <Accordion title="Lieferung & Rückgabe">
             <p>
-              Diese Seite ist eine Vorschau. Versandkosten, Lieferbedingungen
-              und Rückgabeinformationen werden vor dem Verkaufsstart verbindlich
-              ergänzt. Es wird aktuell keine Bestellung ausgelöst.
+              Für den Verkaufsstart ist eine Lieferzeit von ca. 4 Tagen vorgesehen.
+              Versandkosten und Rückgabeinformationen werden vor dem Verkaufsstart
+              verbindlich ergänzt. Testkäufe lösen keine Lieferung aus.
             </p>
           </Accordion>
         </div>
@@ -174,6 +175,7 @@ export default function ProductChooser({
           src={`/images/${selectedImage.src}-1440.webp`}
           alt={selectedImage.alt}
         />
+        {selectedImage.staged && <p className="scene-label">KI-inszenierte Wohnszene. Für Muster, Farbe und Stoffdetails sind die Originalfotos massgeblich.</p>}
         <div className="lightbox-controls">
           <button
             className="icon-button"
