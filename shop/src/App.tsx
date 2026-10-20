@@ -227,10 +227,10 @@ export default function App() {
         <section className="editorial section-shell">
           <Reveal className="editorial-picture">
             <img
-              src="/images/evening-campaign-v8-960.webp"
-              srcSet="/images/evening-campaign-v8-640.webp 640w, /images/evening-campaign-v8-960.webp 960w, /images/evening-campaign-v8-1440.webp 1440w"
+              src="/images/evening-snapshot-v9-960.webp"
+              srcSet="/images/evening-snapshot-v9-640.webp 640w, /images/evening-snapshot-v9-960.webp 960w, /images/evening-snapshot-v9-1440.webp 1440w"
               sizes="(max-width:760px) 100vw, 55vw"
-              alt="KI-Alltagsszene: Erwachsene Frau mit grauer Stars-Decke auf einem Ledersofa im analogen Blitzfoto-Look"
+              alt="KI-Alltagsszene: Erwachsene Frau auf einem Ledersofa, die ihre graue Stars-Decke verspielt bis unter die Augen zieht"
               width="1536"
               height="1024"
               loading="lazy"
