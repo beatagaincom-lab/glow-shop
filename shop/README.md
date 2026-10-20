@@ -25,9 +25,19 @@ This is a test storefront at CHF 59.90 per blanket. The merchant confirmed free 
 
 Confirm the exact legal merchant name, tax treatment, available stock, return policy, delivery process and image usage rights. Add complete legal/privacy information. Replace the deliberate test-only gate only after the correct live account is configured. The sandbox webhook verifies Stripe signatures and writes canonical paid test orders to Supabase with idempotency; it never triggers fulfillment. A success-page visit is never a fulfillment trigger. Do not enable real payments with the current test-only backend.
 
-Supabase project `qvcarifkppszjvlhrndn` has a private, RLS-enabled `glow_orders` table for sandbox webhook verification. Service credentials belong only in encrypted Vercel Preview variables. The current Vercel connector cannot manage this team, so the Supabase URL and service key are not yet configured in Preview. Production inventory, fulfillment access, receipts, returns and refunds still need a defined workflow.
+Supabase project `qvcarifkppszjvlhrndn` has a private, RLS-enabled `glow_orders` table for sandbox webhook verification. Supabase service credentials and the Stripe webhook signing secret are configured in Vercel Preview. Production inventory, fulfillment access, receipts, returns and refunds still need a defined workflow.
 
-The preview is excluded from search indexing. Remove preview labels and indexing restrictions only at the agreed launch. Connect the chosen subdomain of bettundbad.ch after DNS and deployment decisions are finalized.
+The preview is excluded from search indexing. Remove preview labels and indexing restrictions only at the agreed launch. `glow.bettundbad.ch` is already verified on Vercel, resolves to `76.76.21.21`, and serves an older production build over HTTPS. It is not the latest preview.
+
+## Verified sandbox delivery — 20 October 2026
+
+- Fixed the enabled sandbox endpoint's URL: `x-vercel-set-bypass-cookie` caused an HTTP 307 redirect before the webhook handler. Removed that browser-only parameter while retaining the approved Preview automation bypass. No signing secret was rotated.
+- Stripe replay of a previously missing paid event now persisted the order. A second replay left exactly one row.
+- A fresh CHF 59.90 Checkout payment completed in the browser with synthetic customer data and a Stripe test card. Its first automatic event delivery created a `livemode=false`, `fulfillment_status=test_only` order without a replay or locally fabricated signature.
+- The webhook still targets a pinned protected Preview deployment. Preserve that deployment until the endpoint is intentionally moved and retested.
+- Browser returns from Checkout require access to the protected Preview. This is separate from webhook access; never put the webhook bypass credential into browser return URLs.
+- Recheck the route with `node --env-file=.env.local scripts/check-webhook-route.mjs`. It sends unsigned empty requests without following redirects and expects the handler's HTTP 400 signature rejection. It never prints credential-bearing URLs or customer data.
+- Before accepting real orders, provide the actual legal operator, contact email, stock, tax treatment and fulfillment/return process. The main Bett & Bad site's published imprint contains obvious sample data and must not be copied as legal identity.
 
 ## Images
 
