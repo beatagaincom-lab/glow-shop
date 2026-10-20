@@ -184,10 +184,10 @@ export default function App() {
           <div className="hero-visual">
             <div className="hero-arch">
               <img
-                src="/images/stars-v3-960.webp"
-                srcSet="/images/stars-v3-640.webp 640w, /images/stars-v3-960.webp 960w, /images/stars-v3-1440.webp 1122w"
+                src="/images/hero-real-v7-960.webp"
+                srcSet="/images/hero-real-v7-640.webp 640w, /images/hero-real-v7-960.webp 960w, /images/hero-real-v7-1440.webp 1122w"
                 sizes="(max-width:760px) 100vw, 50vw"
-                alt="Inszenierte Wohnszene: eine graue Stars-Decke auf einem Leinensessel im Zürcher Abendlicht"
+                alt="KI-inszenierte Wohnszene: graue Stars-Decke mit weichem Flor auf einem Leinensessel im natürlichen Fensterlicht"
                 width="1122"
                 height="1402"
                 fetchPriority="high"
@@ -227,8 +227,8 @@ export default function App() {
         <section className="editorial section-shell">
           <Reveal className="editorial-picture">
             <img
-              src="/images/evening-v6-960.webp"
-              srcSet="/images/evening-v6-640.webp 640w, /images/evening-v6-960.webp 960w, /images/evening-v6-1440.webp 1440w"
+              src="/images/evening-real-v7-960.webp"
+              srcSet="/images/evening-real-v7-640.webp 640w, /images/evening-real-v7-960.webp 960w, /images/evening-real-v7-1440.webp 1440w"
               sizes="(max-width:760px) 100vw, 55vw"
               alt="KI-Alltagsszene: Eine Frau mit Buch und grauer Stars-Decke auf ihrem Sofa"
               width="1536"
