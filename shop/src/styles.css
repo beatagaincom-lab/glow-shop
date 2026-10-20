@@ -336,20 +336,11 @@ p {
   margin: -18px;
   padding: 18px;
 }
-.scroll-aura {
-  position: absolute;
-  inset: 22px 12px;
-  border-radius: 50%;
-  background: conic-gradient(from 25deg, #edcf8100, #f0d48de0 22%, #d7dfa296 42%, #c5d9bc18 57%, #efdba8d0 78%, #edcf8100);
-  filter: blur(22px);
-  pointer-events: none;
-}
 .scroll-photo { position: relative; z-index: 1; }
 .scroll-orbit {
   position: absolute;
   inset: 24px 18px;
   z-index: 2;
-  border: 1px solid #f3dd9e35;
   border-radius: 50%;
   pointer-events: none;
 }
@@ -360,8 +351,8 @@ p {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #fff2c8;
-  box-shadow: 0 0 10px 3px #ffe4a590, 0 0 30px 8px #f0d48d50;
+  background: #fffdf5;
+  box-shadow: 0 0 7px 1px #fffdf580;
 }
 .scroll-orbit i + i { top: auto; left: auto; right: 15%; bottom: 12%; width: 3px; height: 3px; }
 .glow-copy .effect-motifs { flex-wrap: wrap; gap: 8px; }
@@ -408,8 +399,7 @@ p {
   overflow: hidden;
   position: relative;
   background: #cabdae;
-  border: 1px solid #e6d9b6;
-  box-shadow: 0 0 0 5px #f5eddb70, 0 12px 38px #54473120;
+  border: 1px solid #ffffff80;
 }
 .hero-arch > img {
   width: 100%;

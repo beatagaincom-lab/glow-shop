@@ -10,8 +10,7 @@ export default function ScrollGlow({ children }: { children: ReactNode }) {
   const y = useTransform(scrollYProgress, [0, 1], [18, -18]);
   const scale = useTransform(scrollYProgress, [0, .5, 1], [.97, 1, .98]);
   return <div ref={ref} className="scroll-glow">
-    <motion.div className="scroll-aura" aria-hidden="true" style={{ rotate: reduce ? 0 : rotation, opacity: reduce ? .5 : opacity }} />
-    <motion.div className="scroll-orbit" aria-hidden="true" style={{ rotate: reduce ? -12 : rotation }}><i /><i /></motion.div>
+    <motion.div className="scroll-orbit" aria-hidden="true" style={{ rotate: reduce ? -12 : rotation, opacity: reduce ? .4 : opacity }}><i /><i /></motion.div>
     <motion.div className="scroll-photo" style={{ y: reduce ? 0 : y, scale: reduce ? 1 : scale }}>{children}</motion.div>
   </div>;
 }
