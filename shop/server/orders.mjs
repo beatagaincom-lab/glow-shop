@@ -1,9 +1,11 @@
 import { validateCart, price } from "./catalog.mjs";
 
 // Validate canonical Stripe data, never browser-provided totals or addresses.
-export function orderFromSession(session, eventId) {
+export function orderFromSession(session, eventId, mode = "test") {
   if (session.metadata?.shop !== "glow") return null;
-  if (session.livemode !== false || !session.id?.startsWith("cs_test_"))
+  const live = mode === "live";
+  if (!["test", "live"].includes(mode) ||
+      session.livemode !== live || !session.id?.startsWith(`cs_${mode}_`))
     throw new Error("unexpected_payment_mode");
   if (session.status !== "complete" || session.payment_status !== "paid") return null;
   const items = validateCart({ items: JSON.parse(session.metadata.cart) });
@@ -19,14 +21,14 @@ export function orderFromSession(session, eventId) {
   return {
     stripe_session_id: session.id,
     stripe_event_id: eventId,
-    livemode: false,
+    livemode: live,
     amount_total: session.amount_total,
     currency: "chf",
     items,
     customer_email: session.customer_details.email,
     shipping_name: shipping.name,
     shipping_address: shipping.address,
-    fulfillment_status: "test_only",
+    fulfillment_status: live ? "paid" : "test_only",
   };
 }
 
@@ -35,7 +37,8 @@ export async function saveOrder(order, fetcher = fetch) {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!base || !key || new URL(base).protocol !== "https:")
     throw new Error("order_store_not_configured");
-  const response = await fetcher(`${base.replace(/\/$/, "")}/rest/v1/glow_orders?on_conflict=stripe_session_id`, {
+  const table = order.livemode === true ? "glow_live_orders" : "glow_orders";
+  const response = await fetcher(`${base.replace(/\/$/, "")}/rest/v1/${table}?on_conflict=stripe_session_id`, {
     method: "POST",
     headers: {
       apikey: key,

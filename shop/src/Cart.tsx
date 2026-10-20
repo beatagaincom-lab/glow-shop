@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { ShoppingBag, Trash2, LockKeyhole, Check } from "lucide-react";
 import { type CartLine, products, PRICE, money } from "./data";
 import { GlowButton, Modal, Quantity } from "./components";
+import { LIVE_SHOP } from "./shopMode";
 export default function Cart({
   open,
   onClose,
@@ -48,6 +49,13 @@ export default function Cart({
       const url = new URL(body.url);
       if (url.protocol !== "https:" || url.hostname !== "checkout.stripe.com")
         throw new Error("Der Checkout konnte nicht sicher geöffnet werden.");
+      if (LIVE_SHOP) {
+        try {
+          sessionStorage.setItem("glow-pending-cart", JSON.stringify({
+            sessionId: body.sessionId, cart: JSON.stringify(lines),
+          }));
+        } catch { /* Checkout remains usable if browser storage is disabled. */ }
+      }
       window.location.assign(url.href);
     } catch (e) {
       setError(
@@ -123,13 +131,13 @@ export default function Cart({
               <span>Zwischensumme</span>
               <strong>{money(total)}</strong>
             </div>
-            <p>Kostenloser Versand in der Schweiz · Testkauf ohne Lieferung.</p>
+            <p>Kostenloser Versand in der Schweiz · Keine MWST.{!LIVE_SHOP && " Testkauf ohne Lieferung."}</p>
             <div className="checkout-notice">
               <LockKeyhole size={17} />
-              <span>Bett und Bad Sandbox · Nur Testdaten verwenden.</span>
+              <span>{LIVE_SHOP ? "Sicher bezahlen mit Stripe · Ohne Kundenkonto." : "Bett und Bad Sandbox · Nur Testdaten verwenden."}</span>
             </div>
             <GlowButton onClick={checkout} disabled={busy}>
-              {busy ? "Wird geöffnet …" : "Zum Test-Checkout"}
+              {busy ? "Wird geöffnet …" : LIVE_SHOP ? "Weiter zur Zahlung" : "Zum Test-Checkout"}
             </GlowButton>
             {error && (
               <p role="alert" className="checkout-error">

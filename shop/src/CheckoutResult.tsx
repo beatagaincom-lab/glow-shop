@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Modal, GlowButton, Spark } from "./components";
 import { money } from "./data";
-export default function CheckoutResult() {
+export default function CheckoutResult({ onPaid }: { onPaid: () => void }) {
+  const paidCallback = useRef(onPaid);
+  paidCallback.current = onPaid;
   const [open, setOpen] = useState(
     () => new URLSearchParams(location.search).get("checkout") === "success",
   );
-  const [result, setResult] = useState<{ paid: boolean; total: number } | null>(
+  const [result, setResult] = useState<{ paid: boolean; total: number; livemode: boolean } | null>(
       null,
     ),
     [error, setError] = useState(""),
@@ -22,6 +24,16 @@ export default function CheckoutResult() {
         const body = await r.json();
         if (!r.ok) throw new Error(body.message);
         setResult(body);
+        if (body.paid && body.livemode) {
+          try {
+            const saved = JSON.parse(sessionStorage.getItem("glow-pending-cart") || "null");
+            if (saved?.sessionId === id) {
+              sessionStorage.removeItem("glow-pending-cart");
+              if (saved.cart === localStorage.getItem("glow-bag-v1"))
+                paidCallback.current();
+            }
+          } catch { /* Preserve the bag when storage cannot be checked safely. */ }
+        }
       })
       .catch((e) => {
         if (e.name !== "AbortError")
@@ -40,7 +52,7 @@ export default function CheckoutResult() {
     <Modal
       open={open}
       onClose={close}
-      title={result?.paid ? "Dein Test hat funktioniert." : "Dein Testkauf."}
+      title={result?.paid ? result.livemode ? "Vielen Dank für deine Bestellung." : "Dein Test hat funktioniert." : "Deine Zahlungsbestätigung."}
       className="info-modal"
     >
       <Spark className="result-spark" />
@@ -55,12 +67,13 @@ export default function CheckoutResult() {
         <>
           <p>
             {result.paid
-              ? `Stripe hat die Testzahlung über ${money(result.total)} bestätigt.`
-              : "Die Testzahlung ist noch nicht bestätigt. Es wurde keine Bestellung zur Lieferung freigegeben."}
+              ? `Stripe hat die ${result.livemode ? "Zahlung" : "Testzahlung"} über ${money(result.total)} bestätigt.`
+              : "Die Zahlung ist noch nicht bestätigt. Es wurde keine Bestellung zur Lieferung freigegeben."}
           </p>
           <p>
-            Es wurde kein echtes Geld abgebucht. Es erfolgt keine Lieferung.
-            Deine Tasche bleibt zum weiteren Ausprobieren erhalten.
+            {result.livemode
+              ? "Bernard Fries bearbeitet deine Bestellung. Die Lieferung erfolgt voraussichtlich in ca. 4 Tagen nach bestätigter Zahlung. Bei Fragen: bernardfries7@gmail.com."
+              : "Es wurde kein echtes Geld abgebucht. Es erfolgt keine Lieferung. Deine Tasche bleibt zum weiteren Ausprobieren erhalten."}
           </p>
           <GlowButton
             onClick={result.paid ? close : () => setAttempt((n) => n + 1)}

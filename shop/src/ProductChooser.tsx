@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Check, Expand, ChevronLeft, ChevronRight } from "lucide-react";
 import { products, money, PRICE, type Product } from "./data";
 import { Accordion, GlowButton, Modal, Quantity } from "./components";
+import { LIVE_SHOP } from "./shopMode";
 
 function featuredImage(product: Product) {
   return product.images.find((im) => im.featured) || product.images.find((im) => im.staged) || product.images[0];
@@ -132,9 +133,9 @@ export default function ProductChooser({
           <h3>Flair {product.name}</h3>
           <p className="product-subtitle">{product.subtitle}</p>
           <div className="price">{money(PRICE)}</div>
-          <div className="price-note">Preis pro Decke · Aktuell nur Testkäufe</div>
-          <p className="delivery-estimate">Motiv verfügbar · Verkauf startet in Kürze.</p>
-          <p className="delivery-estimate">Kostenloser Versand in der Schweiz · geplante Lieferung in ca. 4 Tagen.</p>
+          <div className="price-note">Endpreis · keine MWST{!LIVE_SHOP && " · Aktuell nur Testkäufe"}</div>
+          <p className="delivery-estimate">Motiv verfügbar{!LIVE_SHOP && " · Verkauf startet in Kürze."}</p>
+          <p className="delivery-estimate">Kostenloser Versand in der Schweiz · Lieferung in ca. 4 Tagen nach Zahlung.</p>
           <div className="specs">
             <span>150 × 200 cm</span>
             <span>100 % Polyester · 280 g/m²</span>
@@ -164,11 +165,10 @@ export default function ProductChooser({
           </Accordion>
           <Accordion title="Lieferung & Rückgabe">
             <p>
-              Für den Verkaufsstart sind kostenloser Versand innerhalb der Schweiz
-              und eine Lieferzeit von ca. 4 Tagen vorgesehen. Die Rückgaberegeln
-              werden vor dem Verkaufsstart verbindlich ergänzt. Testkäufe lösen
-              keine Lieferung aus.
+              Kostenloser Versand innerhalb der Schweiz, Lieferung voraussichtlich in ca. 4 Tagen nach bestätigter Zahlung.
+              Versand durch Bett & Bad, Bernard Fries. {!LIVE_SHOP && "Testkäufe lösen keine Lieferung aus."}
             </p>
+            <p>14 Tage freiwillige Rückgabe für unbenutzte, ungewaschene Decken. Melde dich unter <a href="mailto:bernardfries7@gmail.com">bernardfries7@gmail.com</a>. Rücksendungen: Bett & Bad, Bernard Fries, Bellariastrasse 47, 8038 Zürich. Rückporto zu deinen Kosten; bei Mängeln oder falscher Lieferung übernehmen wir es. Details findest du unter «Lieferung & Rückgabe» im Footer.</p>
           </Accordion>
         </div>
       </div>

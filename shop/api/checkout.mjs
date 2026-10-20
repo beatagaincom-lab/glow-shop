@@ -1,6 +1,7 @@
 import { catalog, price, validateCart } from "../server/catalog.mjs";
 import { getStripe, appUrl, reply } from "../server/stripe.mjs";
 import { createHash, randomUUID } from "node:crypto";
+import { paymentMode } from "../server/mode.mjs";
 export function checkoutKey(items, requestId = randomUUID()) {
   if (typeof requestId !== "string" || !/^[a-f0-9-]{36}$/i.test(requestId))
     throw new Error("invalid_request_id");
@@ -29,7 +30,9 @@ export default async function handler(req, res) {
         message: "Bitte öffne den Checkout direkt im GLOW-Shop.",
       });
     const stripe = await getStripe();
+    const live = paymentMode() === "live";
     const session = await stripe.checkout.sessions.create({
+      integration_identifier: "glow_checkout_kxmpvrta",
       mode: "payment",
       locale: "de",
       line_items: items.map((item) => ({
@@ -39,7 +42,7 @@ export default async function handler(req, res) {
           unit_amount: price,
           product_data: {
             name: `Flair ${catalog[item.id].name}`,
-            description: "GLOW Testkauf · Leuchtdecke 150 × 200 cm",
+            description: `${live ? "GLOW" : "GLOW Testkauf"} · Leuchtdecke 150 × 200 cm`,
             metadata: { sku: catalog[item.id].sku },
           },
         },
@@ -48,7 +51,7 @@ export default async function handler(req, res) {
       shipping_options: [
         {
           shipping_rate_data: {
-            display_name: "Testversand (keine Lieferung)",
+            display_name: live ? "Kostenloser Versand Schweiz" : "Testversand (keine Lieferung)",
             type: "fixed_amount",
             fixed_amount: { amount: 0, currency: "chf" },
           },
@@ -59,16 +62,18 @@ export default async function handler(req, res) {
       custom_text: {
         submit: {
           message:
-            "Testkauf: Es erfolgt keine echte Zahlung und keine Lieferung.",
+            live
+              ? "CHF 59.90 pro Decke, keine MWST. Kostenloser Versand Schweiz, ca. 4 Tage. 14 Tage freiwillige Rückgabe."
+              : "Testkauf: Es erfolgt keine echte Zahlung und keine Lieferung.",
         },
       },
       metadata: { shop: "glow", cart: JSON.stringify(items) },
     }, { idempotencyKey });
-    return reply(res, 200, { url: session.url });
+    return reply(res, 200, { url: session.url, sessionId: session.id });
   } catch {
     return reply(res, 503, {
       message:
-        "Der Test-Checkout ist gerade nicht verfügbar. Deine Tasche bleibt gespeichert.",
+        "Der Checkout ist gerade nicht verfügbar. Deine Tasche bleibt gespeichert.",
     });
   }
 }

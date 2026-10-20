@@ -21,6 +21,8 @@ import ProductChooser from "./ProductChooser";
 import Cart from "./Cart";
 import CheckoutResult from "./CheckoutResult";
 import GlowComparison from "./GlowComparison";
+import ShopPolicies, { returnText } from "./ShopPolicies";
+import { LIVE_SHOP } from "./shopMode";
 
 export default function App() {
   const [selected, setSelected] = useState(() => {
@@ -31,7 +33,10 @@ export default function App() {
     [cart, setCart] = useState<CartLine[]>(readCart),
     [bagOpen, setBagOpen] = useState(false),
     [menuOpen, setMenuOpen] = useState(false),
-    [info, setInfo] = useState(""),
+    [info, setInfo] = useState(() => {
+      const value = new URLSearchParams(location.search).get("info");
+      return value && ["Impressum", "Datenschutz", "Lieferung & Rückgabe", "Über GLOW"].includes(value) ? value : "";
+    }),
     [toast, setToast] = useState(""),
     [inShop, setInShop] = useState(false);
   const reduce = useReducedMotion(),
@@ -119,12 +124,12 @@ export default function App() {
   }
   return (
     <>
-      <CheckoutResult />
+      <CheckoutResult onPaid={() => setCart([])} />
       <a className="skip-link" href="#decken">
         Direkt zu den Decken
       </a>
       <div className="preview-strip">
-        GLOW Vorschau · Testkäufe möglich · Keine echte Zahlung
+        {LIVE_SHOP ? "Kostenloser Versand Schweiz · 14 Tage freiwillige Rückgabe" : "GLOW Vorschau · Testkäufe möglich · Keine echte Zahlung"}
       </div>
       <header className="site-header">
         <a href="#" className="brand-link" aria-label="GLOW Startseite">
@@ -289,14 +294,19 @@ export default function App() {
               </p>
             </Accordion>
             <Accordion title="Kann ich bereits bestellen?">
+              {LIVE_SHOP ? <p>Ja. Wähle dein Motiv, lege es in die Tasche und bezahle sicher über Stripe. CHF 59.90 pro Decke, keine MWST, kostenloser Versand in der Schweiz. Du kannst deine Auswahl vor der Zahlung prüfen und korrigieren.</p> :
               <p>
                 GLOW ist aktuell in Vorbereitung. Du kannst alle Motive ansehen
                 und deine Tasche zusammenstellen. Du kannst den Kauf mit Stripe
                 im Testmodus ausprobieren. Dabei erfolgt keine echte Zahlung und
                 keine Lieferung. Der Preis beträgt CHF 59.90 pro Decke.
-                Versand in der Schweiz ist für den geplanten Start kostenlos;
-                die Rückgaberegeln ergänzen wir vor dem Start.
+                Versand in der Schweiz ist für den geplanten Start kostenlos.
               </p>
+              }
+            </Accordion>
+            <Accordion title="Kann ich meine Decke zurückgeben?">
+              <p>{returnText}</p>
+              <button onClick={() => setInfo("Lieferung & Rückgabe")}>Alle Informationen zur Rückgabe</button>
             </Accordion>
           </div>
         </section>
@@ -321,6 +331,7 @@ export default function App() {
               Kontakt <ArrowUpRight size={13} />
             </a>
             <button onClick={() => setInfo("Impressum")}>Impressum</button>
+            <button onClick={() => setInfo("Lieferung & Rückgabe")}>Lieferung & Rückgabe</button>
             <button onClick={() => setInfo("Datenschutz")}>Datenschutz</button>
             <button onClick={() => setInfo("Über GLOW")}>Über GLOW</button>
           </nav>
@@ -414,11 +425,16 @@ export default function App() {
       </Modal>
       <Modal
         open={!!info}
-        onClose={() => setInfo("")}
+        onClose={() => {
+          setInfo("");
+          const url = new URL(location.href);
+          url.searchParams.delete("info");
+          history.replaceState({}, "", url);
+        }}
         title={info}
         className="info-modal"
       >
-        {info === "Impressum" ? (
+        {info === "Lieferung & Rückgabe" ? <ShopPolicies /> : info === "Impressum" ? (
           <>
             <p>
               GLOW · Bett & Bad<br />
@@ -429,7 +445,8 @@ export default function App() {
             <p>
               Kontakt: <a href="mailto:bernardfries7@gmail.com">bernardfries7@gmail.com</a>
             </p>
-            <p>Diese Website befindet sich im Testbetrieb. Testkäufe lösen keine echte Zahlung und keine Lieferung aus.</p>
+            <p>Keine Mehrwertsteuerpflicht. Es wird keine Mehrwertsteuer ausgewiesen.</p>
+            {!LIVE_SHOP && <p>Diese Website befindet sich im Testbetrieb. Testkäufe lösen keine echte Zahlung und keine Lieferung aus.</p>}
           </>
         ) : info === "Datenschutz" ? (
           <>
@@ -439,20 +456,45 @@ export default function App() {
               unter <a href="mailto:bernardfries7@gmail.com">bernardfries7@gmail.com</a>.
             </p>
             <p>
-              Diese Vorschau lädt Schriften und Bilder vom selben Server. Es
+              Diese Website lädt Schriften und Bilder vom selben Server. Es
               sind keine Analyse- oder Werbetracker eingebaut.
             </p>
             <p>
               Deine Tasche wird im lokalen Speicher deines Browsers gesichert.
               Du kannst sie über die Tasche leeren oder über deine
-              Browser-Einstellungen entfernen. Beim Start eines Testkaufs werden
+              Browser-Einstellungen entfernen. Beim Start eines Kaufs werden
               deine Auswahl und die im Checkout eingegebenen Daten von Stripe
-              verarbeitet. Bitte verwende ausschliesslich Testdaten.
+              verarbeitet. {!LIVE_SHOP && "Bitte verwende ausschliesslich Testdaten."}
             </p>
             <p>
-              Beim Seitenaufruf verarbeitet der Hosting-Anbieter technische
-              Zugriffsdaten. Vor Verkaufsstart werden die vollständigen
-              Anbieter- und Datenschutzhinweise ergänzt.
+              Vercel hostet diese Website und verarbeitet technische Zugriffsdaten
+              wie IP-Adresse, Browser und Zeitpunkt des Aufrufs für die Auslieferung
+              und Sicherheit. Stripe verarbeitet die Zahlung und die im Checkout
+              eingegebenen Kontaktdaten. Vollständige Kartendaten werden nicht in
+              unserem Shop gespeichert.
+            </p>
+            <p>
+              Bestätigte {LIVE_SHOP ? "Bestellungen" : "Testbestellungen"} werden in einer zugriffsgeschützten
+              Supabase-Datenbank gespeichert: E-Mail-Adresse, Liefername und
+              Lieferadresse, bestellte Artikel, Betrag sowie Zahlungsreferenzen.
+              {LIVE_SHOP ? "Diese Daten dienen der Bestellbearbeitung, dem Versand durch Bernard Fries und der Bearbeitung von Rückgaben." : "Diese Daten dienen der Prüfung des Bestellablaufs und lösen keinen Versand aus."}
+            </p>
+            <p>
+              Bei einer E-Mail-Anfrage verarbeitet Bernard Fries deine Nachricht
+              und Kontaktdaten zur Bearbeitung des Anliegens über Gmail.
+              Die eingesetzten Dienstleister können Daten auch ausserhalb der
+              Schweiz verarbeiten. Weitere Informationen:
+              {" "}<a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noreferrer">Vercel</a>,
+              {" "}<a href="https://stripe.com/ch/privacy" target="_blank" rel="noreferrer">Stripe</a>,
+              {" "}<a href="https://supabase.com/privacy" target="_blank" rel="noreferrer">Supabase</a>,
+              {" "}<a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">Google</a>.
+            </p>
+            <p>
+              Du kannst unter der oben genannten Kontaktadresse Auskunft,
+              Berichtigung oder Löschung deiner Daten verlangen. Wir bearbeiten
+              solche Anfragen unter Berücksichtigung gesetzlicher
+              Aufbewahrungspflichten. Vor dem echten Verkaufsstart ergänzen wir
+              die konkreten Speicherfristen und Angaben zur Datenübermittlung.
             </p>
             <a
               href="https://www.bettundbad.ch/"
@@ -465,14 +507,14 @@ export default function App() {
         ) : (
           <>
             <p>
-              GLOW ist eine geplante Auswahl von Flair-Leuchtdecken für Bett &
+              GLOW ist eine Auswahl von Flair-Leuchtdecken für Bett &
               Bad. Die Produktgalerien zeigen Originalbilder des Herstellers.
               Die Wohnszenen auf dieser Seite wurden KI-gestützt auf Basis des
               echten Produkts inszeniert.
             </p>
             <p>
-              Der Shop ist eine Vorschau. Stripe ist im Testmodus angebunden.
-              Der Preis beträgt CHF 59.90 pro Decke. Der geplante Versand in der
+              {!LIVE_SHOP && "Der Shop ist eine Vorschau. Stripe ist im Testmodus angebunden. "}
+              Der Preis beträgt CHF 59.90 pro Decke. Der Versand in der
               Schweiz ist kostenlos. Betreiber ist Bernard Fries, Bett & Bad,
               Bellariastrasse 47, 8038 Zürich.
             </p>

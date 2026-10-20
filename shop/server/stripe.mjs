@@ -1,15 +1,21 @@
 import Stripe from "stripe";
-export async function getStripe() {
+import { paymentMode, expectedAccount } from "./mode.mjs";
+export async function getStripe({ requireCheckout = true } = {}) {
+  const mode = paymentMode();
   const key = process.env.STRIPE_SECRET_KEY;
   if (
-    process.env.CHECKOUT_ENABLED !== "true" ||
-    process.env.STRIPE_MODE !== "test" ||
-    !key?.startsWith("sk_test_")
+    (requireCheckout && process.env.CHECKOUT_ENABLED !== "true") ||
+    !new RegExp(`^(sk|rk)_${mode}_`).test(key || "")
   )
     throw new Error("checkout_disabled");
+  if (mode === "live" && requireCheckout &&
+      (!process.env.STRIPE_WEBHOOK_SECRET ||
+       !process.env.SUPABASE_URL ||
+       !process.env.SUPABASE_SERVICE_ROLE_KEY))
+    throw new Error("live_order_store_not_configured");
   const stripe = new Stripe(key, { maxNetworkRetries: 2, timeout: 15000 });
   const account = await stripe.accounts.retrieve();
-  if (account.id !== "acct_1USDUWLLnPcxPmsT") throw new Error("wrong_account");
+  if (account.id !== expectedAccount(mode)) throw new Error("wrong_account");
   return stripe;
 }
 export function appUrl() {
