@@ -317,13 +317,10 @@ export default function App() {
             </p>
           </div>
           <nav aria-label="Informationen">
-            <a
-              href="https://www.bettundbad.ch/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Kontakt bei Bett & Bad <ArrowUpRight size={13} />
+            <a href="mailto:bernardfries7@gmail.com">
+              Kontakt <ArrowUpRight size={13} />
             </a>
+            <button onClick={() => setInfo("Impressum")}>Impressum</button>
             <button onClick={() => setInfo("Datenschutz")}>Datenschutz</button>
             <button onClick={() => setInfo("Über GLOW")}>Über GLOW</button>
           </nav>
@@ -421,8 +418,26 @@ export default function App() {
         title={info}
         className="info-modal"
       >
-        {info === "Datenschutz" ? (
+        {info === "Impressum" ? (
           <>
+            <p>
+              GLOW · Bett & Bad<br />
+              Betreiber: Bernard Fries<br />
+              Bellariastrasse 47<br />
+              8038 Zürich, Schweiz
+            </p>
+            <p>
+              Kontakt: <a href="mailto:bernardfries7@gmail.com">bernardfries7@gmail.com</a>
+            </p>
+            <p>Diese Website befindet sich im Testbetrieb. Testkäufe lösen keine echte Zahlung und keine Lieferung aus.</p>
+          </>
+        ) : info === "Datenschutz" ? (
+          <>
+            <p>
+              Verantwortlich: Bernard Fries, Bett & Bad, Bellariastrasse 47,
+              8038 Zürich, Schweiz. Bei Fragen zu deinen Daten erreichst du uns
+              unter <a href="mailto:bernardfries7@gmail.com">bernardfries7@gmail.com</a>.
+            </p>
             <p>
               Diese Vorschau lädt Schriften und Bilder vom selben Server. Es
               sind keine Analyse- oder Werbetracker eingebaut.
@@ -458,8 +473,8 @@ export default function App() {
             <p>
               Der Shop ist eine Vorschau. Stripe ist im Testmodus angebunden.
               Der Preis beträgt CHF 59.90 pro Decke. Der geplante Versand in der
-              Schweiz ist kostenlos; Anbieterangaben werden vor dem Verkaufsstart
-              vervollständigt.
+              Schweiz ist kostenlos. Betreiber ist Bernard Fries, Bett & Bad,
+              Bellariastrasse 47, 8038 Zürich.
             </p>
           </>
         )}

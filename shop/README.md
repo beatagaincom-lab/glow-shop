@@ -23,7 +23,7 @@ This is a test storefront at CHF 59.90 per blanket. The merchant confirmed free 
 
 ## Before commercial launch
 
-Confirm the exact legal merchant name, tax treatment, available stock, return policy, delivery process and image usage rights. Add complete legal/privacy information. Replace the deliberate test-only gate only after the correct live account is configured. The sandbox webhook verifies Stripe signatures and writes canonical paid test orders to Supabase with idempotency; it never triggers fulfillment. A success-page visit is never a fulfillment trigger. Do not enable real payments with the current test-only backend.
+The merchant confirmed Bernard Fries as operator, Bett & Bad as brand, Bellariastrasse 47, 8038 Zürich, and bernardfries7@gmail.com as public contact. All five motifs are confirmed available; exact stock counts have not been supplied and must not be invented. Confirm tax treatment, stock management, return policy, delivery process and image usage rights. Complete privacy information. Replace the deliberate test-only gate only after the correct live account is configured. The sandbox webhook verifies Stripe signatures and writes canonical paid test orders to Supabase with idempotency; it never triggers fulfillment. A success-page visit is never a fulfillment trigger. Do not enable real payments with the current test-only backend.
 
 Supabase project `qvcarifkppszjvlhrndn` has a private, RLS-enabled `glow_orders` table for sandbox webhook verification. Supabase service credentials and the Stripe webhook signing secret are configured in Vercel Preview. Production inventory, fulfillment access, receipts, returns and refunds still need a defined workflow.
 
@@ -37,7 +37,7 @@ The preview is excluded from search indexing. Remove preview labels and indexing
 - The webhook still targets a pinned protected Preview deployment. Preserve that deployment until the endpoint is intentionally moved and retested.
 - Browser returns from Checkout require access to the protected Preview. This is separate from webhook access; never put the webhook bypass credential into browser return URLs.
 - Recheck the route with `node --env-file=.env.local scripts/check-webhook-route.mjs`. It sends unsigned empty requests without following redirects and expects the handler's HTTP 400 signature rejection. It never prints credential-bearing URLs or customer data.
-- Before accepting real orders, provide the actual legal operator, contact email, stock, tax treatment and fulfillment/return process. The main Bett & Bad site's published imprint contains obvious sample data and must not be copied as legal identity.
+- Operator, contact email and general product availability were subsequently confirmed directly by the merchant and added to the storefront. Exact inventory, tax treatment and fulfillment/return process remain launch requirements. The main Bett & Bad site's published imprint contains obvious sample data and must not be copied as legal identity.
 
 ## Images
 

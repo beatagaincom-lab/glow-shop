@@ -133,6 +133,7 @@ export default function ProductChooser({
           <p className="product-subtitle">{product.subtitle}</p>
           <div className="price">{money(PRICE)}</div>
           <div className="price-note">Preis pro Decke · Aktuell nur Testkäufe</div>
+          <p className="delivery-estimate">Motiv verfügbar · Verkauf startet in Kürze.</p>
           <p className="delivery-estimate">Kostenloser Versand in der Schweiz · geplante Lieferung in ca. 4 Tagen.</p>
           <div className="specs">
             <span>150 × 200 cm</span>
