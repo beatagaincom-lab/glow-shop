@@ -1,11 +1,19 @@
 # GLOW: Bestellungen bearbeiten
 
-Stand 20. Oktober 2026. Der Shop ist weiterhin im Testbetrieb.
-Live-Code ist vorbereitet. Der Betreiber hat den Supabase-Serverzugang und
+Stand 20. Oktober 2026. Der Shop ist auf https://glow.bettundbad.ch live.
+Produktionsdeployment: `dpl_9uiQHqr3zr6Y9F4VummDZmSKBcHU`, Code `148d88a`.
+Der Betreiber hat den Supabase-Serverzugang und
 ein separates Stripe-Live-Webhook-Geheimnis ausdrücklich für Vercel Production
-freigegeben; beide sind dort als Secrets hinterlegt. Der Live-API-Schlüssel
-fehlt noch. Der Live-Webhook ist vorbereitet, aber bewusst deaktiviert.
-Die Produktionskonfiguration ist noch nicht abschliessend geprüft.
+freigegeben; beide sind dort als Secrets hinterlegt. Der eingeschränkte
+Live-API-Schlüssel ist ausschliesslich in Vercel Production als Secret
+gespeichert. Direkte Stripe-Leseprüfungen für Account und Checkout Sessions
+lieferten HTTP 200 und bestätigten das Konto `acct_1USDUNLnJPWAKfhq`.
+Der Live-Webhook ist aktiviert. Der öffentliche Checkout erzeugt Live-Sitzungen
+mit CHF 59.90 pro Decke und kostenlosem Versand. Signierte Diagnoseereignisse
+für unbezahlte Live-Sitzungen werden nach kanonischer Stripe-Abfrage mit HTTP 200
+bestätigt, ohne eine Bestellung anzulegen. Ungültige Signaturen ergeben HTTP 400.
+Es wurde keine echte Zahlung durchgeführt: Speicherung eines tatsächlich
+bezahlten Live-Kaufs und E-Mail-Zustellung sind noch nicht Ende zu Ende geprüft.
 
 ## Bestätigte Geschäftsangaben
 
@@ -43,32 +51,35 @@ Schlüssel oder Kundendaten in GitHub, Screenshots oder öffentliche Dateien.
 Bestandsreservierungen und automatische Versandetiketten sind nicht eingebaut.
 Bei ausverkauftem Motiv den Verkauf vor weiteren Bestellungen sperren.
 
-## Noch vor echten Verkäufen auszuführen
+## Einrichtung und verbleibende Betriebsprüfung
 
-- Produktions-Live-Schlüssel sicher in Vercel hinterlegen, korrektes Konto
-  prüfen. Keine Geheimnisse im Chat oder im Repository.
+- Produktions-Live-Schlüssel ist in Vercel hinterlegt und das korrekte Konto
+  lesend geprüft. Checkout-Schreibzugriff und Verwendung im Deployment sind
+  über den öffentlichen Kaufstart geprüft. Keine Geheimnisse im Repository.
 - Supabase-Serverzugang ist für Preview und Production freigegeben und in
   Vercel als Secret gespeichert. Eigener Production-Signaturschlüssel ist
   hinterlegt. Live-Webhook `we_1USgwfLnJPWAKfhqVL5jbWW0` zeigt auf
   `https://glow.bettundbad.ch/api/stripe-webhook`, API-Version
   `2026-09-30.endive`, und empfängt nach Aktivierung
   `checkout.session.completed` / `checkout.session.async_payment_succeeded`.
-  Er ist bis zur fertigen Live-Einrichtung deaktiviert. Kein Duplikat anlegen.
+  Er ist aktiviert. Kein Duplikat anlegen.
 - `STRIPE_MODE=live`, `VITE_SHOP_MODE=live`,
   `APP_URL=https://glow.bettundbad.ch`, `CHECKOUT_ENABLED=true` und
-  `LIVE_CHECKOUT_APPROVED=true` erst beim koordinierten Start setzen.
+  `LIVE_CHECKOUT_APPROVED=true` sind für Production gesetzt.
   `VERCEL_ENV=production` setzt Vercel beim Produktionsdeployment automatisch.
   Zum Pausieren neuer Käufe nur `CHECKOUT_ENABLED=false` setzen:
   Webhooks und Zahlungsstatus müssen für bereits begonnene Käufe weiterlaufen.
-  Aktuell stehen `CHECKOUT_ENABLED` und `LIVE_CHECKOUT_APPROVED` in Production
-  ausdrücklich auf `false`; es wurde kein Produktionsdeployment durchgeführt.
-- Automatische Bestellbestätigung und Zahlungsbelege einrichten und
-  Zustellung prüfen. Der aktuelle Code sendet noch keine Bestell-E-Mails.
-- Datenschutz vor Live-Start um geprüfte Speicherfristen, Hostingregion,
-  Datenübermittlung und zutreffende Vertragsgrundlagen ergänzen.
-- Originalbilder-Nutzungsrecht sicherstellen; KI-Abbildungen bleiben markiert.
-- Produktionsbuild, HTTPS, Zahlung, Webhook, Speicherung, E-Mail und mobile
-  Rückkehrseite gemeinsam abnehmen. Eine echte Testzahlung nur mit
+  Änderungen an Umgebungsvariablen brauchen ein neues Deployment.
+- Stripe-Zahlungsbelege für erfolgreiche Zahlungen sind laut Screenshot
+  des Betreibers aktiviert. Standardsprache dort aktuell Englisch.
+  Der Shop selbst sendet keine zusätzlichen Bestell- oder Versand-E-Mails.
+  Zustellung beim ersten echten Kauf prüfen; Versandbestätigung manuell senden.
+- Datenschutz enthält die verifizierte Datenbankregion Frankfurt,
+  internationale Verarbeitung und die Aufbewahrung von Buchungsbelegen.
+- Herstellerbildrechte bleiben Verantwortung des Betreibers; KI-Abbildungen
+  bleiben markiert.
+- Beim ersten autorisierten echten Kauf Speicherung und E-Mail-Zustellung
+  gemeinsam abnehmen. Eine echte Testzahlung nur mit
   ausdrücklichem Auftrag und festgelegtem Betrag durchführen.
 - Live-Stripe meldet charges_enabled und payouts_enabled=true.
   Auszahlungen sind aktuell manuell: im Stripe-Dashboard selbst anstossen
@@ -76,8 +87,11 @@ Bei ausverkauftem Motiv den Verkauf vor weiteren Bestellungen sperren.
 
 ## Prüfnachweise
 
-`npm test` prüft Warenkorbvalidierung, serverseitige Preise, Wiederholungen,
-Signaturen, Speicherfehler sowie Trennung von Test und Live.
+`npm test`: 12 Tests erfolgreich; Warenkorbvalidierung, serverseitige Preise,
+Wiederholungen, Signaturen, Speicherfehler sowie Trennung von Test und Live.
+Vor jeder Live-Checkout-Erstellung prüft der Server den Datenbankzugriff ohne
+Kundendaten abzurufen. Das ersetzt keine Garantie gegen spätere Ausfälle:
+Bei Speicherfehlern antwortet der Webhook mit 503, damit Stripe erneut zustellt.
 `npm run build` prüft TypeScript und erzeugt den Preview-Build.
 Die Live-Datenbanktabelle ist angelegt, RLS aktiv, ohne Browserrechte.
 Ein Live-End-to-End-Kauf ist noch nicht durchgeführt.
@@ -85,3 +99,4 @@ Ein Live-End-to-End-Kauf ist noch nicht durchgeführt.
 Rechts-/Datenschutzreferenzen für die Ausarbeitung:
 [KMU-Portal Rückgabe](https://www.kmu.admin.ch/de/widerrufsrecht-in-der-schweiz-und-der-eu),
 [EDÖB Datenschutzerklärungen](https://www.edoeb.admin.ch/de/datenschutzerklaerungen-im-internet).
+[KMU Aufbewahrung von Geschäftsbüchern](https://www.kmu.admin.ch/de/elektronische-aufbewahrung-der-geschaeftsbuecher).
