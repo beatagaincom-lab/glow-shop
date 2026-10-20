@@ -329,43 +329,47 @@ p {
   position: relative;
   isolation: isolate;
 }
-.hero-visual::before {
-  content: "";
+.scroll-glow {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  margin: -18px;
+  padding: 18px;
+}
+.scroll-aura {
   position: absolute;
-  inset: -25px -12px 38px;
-  z-index: -1;
-  border-radius: 46% 46% 12% 12%;
-  background: radial-gradient(ellipse at 72% 24%, #ead39a80, transparent 65%),
-    radial-gradient(ellipse at 15% 78%, #aebda060, transparent 64%);
-  filter: blur(24px);
+  inset: 22px 12px;
+  border-radius: 50%;
+  background: conic-gradient(from 25deg, #edcf8100, #f0d48de0 22%, #d7dfa296 42%, #c5d9bc18 57%, #efdba8d0 78%, #edcf8100);
+  filter: blur(22px);
   pointer-events: none;
-  transition: opacity .45s ease, transform .6s var(--ease);
 }
-.hero-visual.ambient-on::before {
-  background: radial-gradient(ellipse at 70% 30%, #e9c85bf0, transparent 68%), radial-gradient(ellipse at 15% 80%, #b4cf88cc, transparent 70%);
-  transform: scale(1);
-}
-.ambient-toggle {
+.scroll-photo { position: relative; z-index: 1; }
+.scroll-orbit {
   position: absolute;
+  inset: 24px 18px;
   z-index: 2;
-  top: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  padding: 10px 16px;
-  white-space: nowrap;
-  border: 1px solid #f2e6b46b;
-  border-radius: 30px;
-  background: #20251de6;
-  color: #fff4d4;
-  font-size: 11px;
-  box-shadow: 0 3px 20px #0003;
+  border: 1px solid #f3dd9e35;
+  border-radius: 50%;
+  pointer-events: none;
 }
-.ambient-toggle svg { width: 16px; height: 16px; }
-.ambient-toggle[aria-pressed="true"] { background: #eee6b5; color: #202c35; box-shadow: 0 0 25px #e9ce7280; }
+.scroll-orbit i {
+  position: absolute;
+  top: 12%;
+  left: 15%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #fff2c8;
+  box-shadow: 0 0 10px 3px #ffe4a590, 0 0 30px 8px #f0d48d50;
+}
+.scroll-orbit i + i { top: auto; left: auto; right: 15%; bottom: 12%; width: 3px; height: 3px; }
+.glow-copy .effect-motifs { flex-wrap: wrap; gap: 8px; }
+.glow-copy .effect-motifs button { min-height: 44px; padding: 10px 14px; border-radius: 24px; border: 1px solid #ffffff25; }
+.glow-copy .effect-motifs button[aria-pressed="true"] { background: #eee6b51c; border-color: #eee6b577; }
+.comparison-manual { margin-top: 18px; }
+.comparison-manual summary { font-size: 11px; color: #c7cdbf; padding: 12px 0; cursor: pointer; }
+.comparison-manual .comparison-control { padding-top: 5px; }
 .glow-button:active::before { opacity: 1; }
 .glow-button:active .button-light { box-shadow: 0 0 24px #fff0acb0; transform: scale(.92); }
 .motif { transition: transform .18s ease, filter .18s ease; }
@@ -850,7 +854,7 @@ p {
   isolation: isolate;
   touch-action: pan-y;
   user-select: none;
-  cursor: ew-resize;
+  cursor: default;
 }
 .comparison-frame > img {
   position: absolute;
