@@ -2,6 +2,7 @@ import { catalog, price, validateCart } from "../server/catalog.mjs";
 import { getStripe, appUrl, reply } from "../server/stripe.mjs";
 import { createHash, randomUUID } from "node:crypto";
 import { paymentMode } from "../server/mode.mjs";
+import { checkLiveOrderStore } from "../server/orders.mjs";
 export function checkoutKey(items, requestId = randomUUID()) {
   if (typeof requestId !== "string" || !/^[a-f0-9-]{36}$/i.test(requestId))
     throw new Error("invalid_request_id");
@@ -31,6 +32,7 @@ export default async function handler(req, res) {
       });
     const stripe = await getStripe();
     const live = paymentMode() === "live";
+    if (live) await checkLiveOrderStore();
     const session = await stripe.checkout.sessions.create({
       integration_identifier: "glow_checkout_kxmpvrta",
       mode: "payment",

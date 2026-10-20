@@ -11,6 +11,14 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       {
+        name: "live-search-indexing",
+        transformIndexHtml(html) {
+          return process.env.VITE_SHOP_MODE === "live"
+            ? html.replace('content="noindex,nofollow"', 'content="index,follow"')
+            : html;
+        },
+      },
+      {
         name: "local-checkout",
         configureServer(server) {
           server.middlewares.use(async (req, res, next) => {

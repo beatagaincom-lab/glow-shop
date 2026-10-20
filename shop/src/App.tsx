@@ -475,15 +475,20 @@ export default function App() {
             </p>
             <p>
               Bestätigte {LIVE_SHOP ? "Bestellungen" : "Testbestellungen"} werden in einer zugriffsgeschützten
-              Supabase-Datenbank gespeichert: E-Mail-Adresse, Liefername und
+              Supabase-Datenbank in Frankfurt (Deutschland) gespeichert: E-Mail-Adresse, Liefername und
               Lieferadresse, bestellte Artikel, Betrag sowie Zahlungsreferenzen.
               {LIVE_SHOP ? "Diese Daten dienen der Bestellbearbeitung, dem Versand durch Bernard Fries und der Bearbeitung von Rückgaben." : "Diese Daten dienen der Prüfung des Bestellablaufs und lösen keinen Versand aus."}
             </p>
             <p>
               Bei einer E-Mail-Anfrage verarbeitet Bernard Fries deine Nachricht
               und Kontaktdaten zur Bearbeitung des Anliegens über Gmail.
-              Die eingesetzten Dienstleister können Daten auch ausserhalb der
-              Schweiz verarbeiten. Weitere Informationen:
+              Neben der Schweiz werden Daten in Deutschland und bei unseren
+              internationalen Dienstleistern insbesondere in den USA verarbeitet.
+              Die Datenbankregion schliesst internationale Support- und
+              Sicherheitsverarbeitung nicht aus. Die Dienstleister erläutern
+              ihre Schutzmassnahmen für internationale Übermittlungen,
+              insbesondere Standardvertragsklauseln und anwendbare
+              Datenschutzrahmen, in ihren Datenschutzinformationen:
               {" "}<a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noreferrer">Vercel</a>,
               {" "}<a href="https://stripe.com/ch/privacy" target="_blank" rel="noreferrer">Stripe</a>,
               {" "}<a href="https://supabase.com/privacy" target="_blank" rel="noreferrer">Supabase</a>,
@@ -493,8 +498,13 @@ export default function App() {
               Du kannst unter der oben genannten Kontaktadresse Auskunft,
               Berichtigung oder Löschung deiner Daten verlangen. Wir bearbeiten
               solche Anfragen unter Berücksichtigung gesetzlicher
-              Aufbewahrungspflichten. Vor dem echten Verkaufsstart ergänzen wir
-              die konkreten Speicherfristen und Angaben zur Datenübermittlung.
+              Aufbewahrungspflichten. Bestell- und Zahlungsbelege bewahren wir
+              für die Buchhaltung zehn Jahre ab Ende des Geschäftsjahres auf.
+              Andere Anfragen löschen wir nach Abschluss der Bearbeitung,
+              sobald sie nicht mehr zur Abwicklung oder zur Klärung von
+              Ansprüchen benötigt werden. Für technische Protokolle und die
+              eigene gesetzliche Datenaufbewahrung der Zahlungsdienstleister
+              gelten deren oben verlinkte Informationen.
             </p>
             <a
               href="https://www.bettundbad.ch/"

@@ -32,19 +32,40 @@ export function orderFromSession(session, eventId, mode = "test") {
   };
 }
 
-export async function saveOrder(order, fetcher = fetch) {
+function storeConfig() {
   const base = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!base || !key || new URL(base).protocol !== "https:")
     throw new Error("order_store_not_configured");
-  const table = order.livemode === true ? "glow_live_orders" : "glow_orders";
-  const response = await fetcher(`${base.replace(/\/$/, "")}/rest/v1/${table}?on_conflict=stripe_session_id`, {
-    method: "POST",
+  return {
+    base: base.replace(/\/$/, ""),
     headers: {
       apikey: key,
+      ...(key.startsWith("sb_secret_") ? {} : { Authorization: `Bearer ${key}` }),
+    },
+  };
+}
+
+// Fail before taking a payment if the live order table cannot be reached.
+// limit=0 checks access without retrieving customer information.
+export async function checkLiveOrderStore(fetcher = fetch) {
+  const { base, headers } = storeConfig();
+  const response = await fetcher(`${base}/rest/v1/glow_live_orders?select=stripe_session_id&limit=0`, {
+    headers,
+    signal: AbortSignal.timeout(10000),
+  });
+  if (!response.ok) throw new Error("order_store_unavailable");
+}
+
+export async function saveOrder(order, fetcher = fetch) {
+  const { base, headers } = storeConfig();
+  const table = order.livemode === true ? "glow_live_orders" : "glow_orders";
+  const response = await fetcher(`${base}/rest/v1/${table}?on_conflict=stripe_session_id`, {
+    method: "POST",
+    headers: {
+      ...headers,
       // Supabase's new sb_secret_ keys are API keys, not JWTs, and must not be
       // sent as bearer tokens. Legacy service_role JWTs still need both headers.
-      ...(key.startsWith("sb_secret_") ? {} : { Authorization: `Bearer ${key}` }),
       "Content-Type": "application/json",
       Prefer: "resolution=ignore-duplicates,return=minimal",
     },
