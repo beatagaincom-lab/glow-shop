@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Check, Expand, ChevronLeft, ChevronRight } from "lucide-react";
 import { products, money, PRICE, type Product } from "./data";
@@ -26,6 +26,7 @@ export default function ProductChooser({
     [zoom, setZoom] = useState(false),
     [added, setAdded] = useState(false);
   const reduce = useReducedMotion();
+  const swipeStart = useRef<{x: number; y: number} | null>(null);
   useEffect(() => {
     setImage(product.images.indexOf(featuredImage(product)));
     setAdded(false);
@@ -79,9 +80,24 @@ export default function ProductChooser({
       </div>
       <div className="product-layout">
         <div className="product-gallery">
-          <div className={`product-main-image ${selectedImage.staged ? "is-editorial" : ""}`}>
+          <div className={`product-main-image ${selectedImage.staged ? "is-editorial" : ""}`}
+            onPointerDown={event => {
+              if (event.button !== 0 || (event.target as HTMLElement).closest('button')) return;
+              swipeStart.current = { x: event.clientX, y: event.clientY };
+            }}
+            onPointerCancel={() => { swipeStart.current = null; }}
+            onPointerUp={event => {
+              const start = swipeStart.current;
+              swipeStart.current = null;
+              if (!start) return;
+              const dx = event.clientX - start.x, dy = event.clientY - start.y;
+              if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+                setImage(current => (current + (dx < 0 ? 1 : -1) + product.images.length) % product.images.length);
+              }
+            }}>
             <AnimatePresence mode="sync" initial={false}>
               <motion.img
+                draggable={false}
                 key={selectedImage.src}
                 src={`/images/${selectedImage.src}-960.webp`}
                 srcSet={`/images/${selectedImage.src}-640.webp 640w, /images/${selectedImage.src}-960.webp 960w, /images/${selectedImage.src}-1440.webp ${selectedImage.staged ? 1122 : 1440}w`}
@@ -105,6 +121,7 @@ export default function ProductChooser({
             </button>
             <span className="image-origin">{selectedImage.staged ? "KI-Wohnszene · nach Originalreferenz" : "Original-Produktfotografie"}</span>
           </div>
+          <p className="gallery-swipe-hint" aria-live="polite">← Wischen zum Entdecken <span>{image + 1} / {product.images.length}</span> →</p>
           <div className="thumbnails" aria-label="Produktbilder">
             {product.images.map((im, i) => (
               <button

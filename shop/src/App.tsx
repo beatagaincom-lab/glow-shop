@@ -38,7 +38,8 @@ export default function App() {
       return value && ["Impressum", "Datenschutz", "Lieferung & Rückgabe", "Über GLOW"].includes(value) ? value : "";
     }),
     [toast, setToast] = useState(""),
-    [inShop, setInShop] = useState(false);
+    [inShop, setInShop] = useState(false),
+    [ambientGlow, setAmbientGlow] = useState(false);
   const reduce = useReducedMotion(),
     product = products.find((p) => p.id === selected)!;
   const first = useRef(true);
@@ -181,8 +182,11 @@ export default function App() {
               </a>
             </div>
           </div>
-          <div className="hero-visual">
+          <div className={`hero-visual ${ambientGlow ? "ambient-on" : ""}`}>
             <div className="hero-arch">
+              <button className="ambient-toggle" aria-pressed={ambientGlow} aria-label="GLOW-Lichtrahmen" onClick={() => setAmbientGlow(value => !value)}>
+                <Spark /><span>{ambientGlow ? "Dein Glow ist an" : "Tipp für deinen Glow"}</span>
+              </button>
               <img
                 src="/images/hero-campaign-v8-960.webp"
                 srcSet="/images/hero-campaign-v8-640.webp 640w, /images/hero-campaign-v8-960.webp 960w, /images/hero-campaign-v8-1440.webp 1122w"

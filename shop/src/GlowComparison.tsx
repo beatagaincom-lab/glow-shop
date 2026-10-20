@@ -1,4 +1,4 @@
-import { useState, type PointerEvent } from "react";
+import { useState, type PointerEvent, type CSSProperties } from "react";
 import { Sun, Moon } from "lucide-react";
 import { products } from "./data";
 import { Reveal } from "./components";
@@ -16,7 +16,7 @@ export default function GlowComparison({ initialProduct }: { initialProduct: str
     setDay(Math.round(Math.max(0, Math.min(100, (event.clientX - bounds.left) / bounds.width * 100))));
   }
   return (
-    <section id="leuchten" className="glow-section is-night" aria-labelledby="glow-title">
+    <section id="leuchten" className="glow-section is-night" aria-labelledby="glow-title" style={{'--night-amount': (100-day)/100} as CSSProperties}>
       <div className="glow-inner section-shell">
         <Reveal className="glow-copy">
           <span className="section-number">02 / WENN ES DUNKEL WIRD</span>
@@ -37,6 +37,7 @@ export default function GlowComparison({ initialProduct }: { initialProduct: str
             onPointerDown={event => { if (event.button !== 0) return; event.currentTarget.setPointerCapture(event.pointerId); moveDivider(event); }}
             onPointerMove={event => { if (event.currentTarget.hasPointerCapture(event.pointerId)) moveDivider(event); }}
             onPointerUp={event => { if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId); }}
+            onPointerCancel={event => { if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId); }}
           >
             <img src={`/images/${scene}-960.webp`} srcSet={`/images/${scene}-640.webp 640w, /images/${scene}-960.webp 960w, /images/${scene}-1440.webp 1122w`} sizes="(max-width: 760px) 92vw, 48vw" width="1122" height="1402" alt={`KI-Wohnszene Flair ${product.name} bei Licht`} loading="lazy" />
             <img className="comparison-night" style={{clipPath: `inset(0 0 0 ${day}%)`}} src={`/images/${nightScene}-960.webp`} srcSet={`/images/${nightScene}-640.webp 640w, /images/${nightScene}-960.webp 960w, /images/${nightScene}-1440.webp 1122w`} sizes="(max-width: 760px) 92vw, 48vw" width="1122" height="1402" alt={`KI-Abendvisualisierung Flair ${product.name} mit nachleuchtenden Motiven`} loading="lazy" />
@@ -46,7 +47,7 @@ export default function GlowComparison({ initialProduct }: { initialProduct: str
           </div>
           <div className="comparison-control">
             <label htmlFor="evening-compare">Dein Blick in den Abend <span>{day === 100 ? "Tag" : day === 0 ? "Nacht" : "Tag & Nacht"}</span></label>
-            <input id="evening-compare" type="range" min="0" max="100" value={day} onChange={event => setDay(Number(event.target.value))} aria-label="Tag-Nacht-Vergleich" aria-valuetext={`${day} Prozent Tagesansicht, ${100-day} Prozent Nachtansicht`} />
+            <input id="evening-compare" type="range" min="0" max="100" value={day} style={{'--day-position': `${day}%`} as CSSProperties} onChange={event => setDay(Number(event.target.value))} aria-label="Tag-Nacht-Vergleich" aria-valuetext={`${day} Prozent Tagesansicht, ${100-day} Prozent Nachtansicht`} />
             <div className="comparison-endpoints"><span>Nacht</span><span>Tag</span></div>
           </div>
           <p className="comparison-caption">KI-Abendvisualisierung · {product.name}<span>Nach Herstellerreferenzen inszeniert. Helligkeit und Dauer sind nicht gemessen und hängen von den Lichtbedingungen ab.</span></p>
