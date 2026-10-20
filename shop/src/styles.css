@@ -325,12 +325,29 @@ p {
   background: var(--line);
   height: 1px;
 }
+.hero-visual {
+  position: relative;
+  isolation: isolate;
+}
+.hero-visual::before {
+  content: "";
+  position: absolute;
+  inset: -25px -22px 38px;
+  z-index: -1;
+  border-radius: 46% 46% 12% 12%;
+  background: radial-gradient(ellipse at 72% 24%, #ead39a80, transparent 65%),
+    radial-gradient(ellipse at 15% 78%, #aebda060, transparent 64%);
+  filter: blur(24px);
+  pointer-events: none;
+}
 .hero-arch {
   height: min(650px, 52vw);
   border-radius: 46% 46% 5px 5px;
   overflow: hidden;
   position: relative;
   background: #cabdae;
+  border: 1px solid #e6d9b6;
+  box-shadow: 0 0 0 5px #f5eddb70, 0 12px 38px #54473120;
 }
 .hero-arch > img {
   width: 100%;

@@ -184,10 +184,10 @@ export default function App() {
           <div className="hero-visual">
             <div className="hero-arch">
               <img
-                src="/images/hero-real-v7-960.webp"
-                srcSet="/images/hero-real-v7-640.webp 640w, /images/hero-real-v7-960.webp 960w, /images/hero-real-v7-1440.webp 1122w"
+                src="/images/hero-campaign-v8-960.webp"
+                srcSet="/images/hero-campaign-v8-640.webp 640w, /images/hero-campaign-v8-960.webp 960w, /images/hero-campaign-v8-1440.webp 1122w"
                 sizes="(max-width:760px) 100vw, 50vw"
-                alt="KI-inszenierte Wohnszene: graue Stars-Decke mit weichem Flor auf einem Leinensessel im natürlichen Fensterlicht"
+                alt="KI-inszenierte Wohnszene: graue Stars-Decke auf dunklem Ledersessel mit seitlichem Studiolicht"
                 width="1122"
                 height="1402"
                 fetchPriority="high"
@@ -227,10 +227,10 @@ export default function App() {
         <section className="editorial section-shell">
           <Reveal className="editorial-picture">
             <img
-              src="/images/evening-real-v7-960.webp"
-              srcSet="/images/evening-real-v7-640.webp 640w, /images/evening-real-v7-960.webp 960w, /images/evening-real-v7-1440.webp 1440w"
+              src="/images/evening-campaign-v8-960.webp"
+              srcSet="/images/evening-campaign-v8-640.webp 640w, /images/evening-campaign-v8-960.webp 960w, /images/evening-campaign-v8-1440.webp 1440w"
               sizes="(max-width:760px) 100vw, 55vw"
-              alt="KI-Alltagsszene: Eine Frau mit Buch und grauer Stars-Decke auf ihrem Sofa"
+              alt="KI-Alltagsszene: Erwachsene Frau mit grauer Stars-Decke auf einem Ledersofa im analogen Blitzfoto-Look"
               width="1536"
               height="1024"
               loading="lazy"
