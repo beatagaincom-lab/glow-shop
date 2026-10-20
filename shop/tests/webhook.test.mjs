@@ -63,11 +63,19 @@ test("webhook body is bounded", async () => {
 test("order storage ignores duplicate session IDs and reports database failure", async () => {
   const previous = [process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY];
   process.env.SUPABASE_URL = "https://example.supabase.co";
-  process.env.SUPABASE_SERVICE_ROLE_KEY = "test-only";
   try {
+    process.env.SUPABASE_SERVICE_ROLE_KEY = "test-only";
     await saveOrder(orderFromSession(session, "evt_test"), async (url, options) => {
       assert.match(url, /on_conflict=stripe_session_id/);
       assert.equal(options.headers.Prefer, "resolution=ignore-duplicates,return=minimal");
+      assert.equal(options.headers.apikey, "test-only");
+      assert.equal(options.headers.Authorization, "Bearer test-only");
+      return { ok: true };
+    });
+    process.env.SUPABASE_SERVICE_ROLE_KEY = "sb_secret_example";
+    await saveOrder(orderFromSession(session, "evt_test"), async (_url, options) => {
+      assert.equal(options.headers.apikey, "sb_secret_example");
+      assert.equal(options.headers.Authorization, undefined);
       return { ok: true };
     });
     await assert.rejects(saveOrder({}, async () => ({ ok: false })), /order_store_unavailable/);

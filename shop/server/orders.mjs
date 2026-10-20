@@ -39,7 +39,9 @@ export async function saveOrder(order, fetcher = fetch) {
     method: "POST",
     headers: {
       apikey: key,
-      Authorization: `Bearer ${key}`,
+      // Supabase's new sb_secret_ keys are API keys, not JWTs, and must not be
+      // sent as bearer tokens. Legacy service_role JWTs still need both headers.
+      ...(key.startsWith("sb_secret_") ? {} : { Authorization: `Bearer ${key}` }),
       "Content-Type": "application/json",
       Prefer: "resolution=ignore-duplicates,return=minimal",
     },
