@@ -1,8 +1,11 @@
 # GLOW: Bestellungen bearbeiten
 
 Stand 20. Oktober 2026. Der Shop ist weiterhin im Testbetrieb.
-Live-Code ist vorbereitet, aber weder Live-Schlüssel noch Live-Webhook und
-Produktionskonfiguration sind abschliessend eingerichtet und geprüft.
+Live-Code ist vorbereitet. Der Betreiber hat den Supabase-Serverzugang und
+ein separates Stripe-Live-Webhook-Geheimnis ausdrücklich für Vercel Production
+freigegeben; beide sind dort als Secrets hinterlegt. Der Live-API-Schlüssel
+fehlt noch. Der Live-Webhook ist vorbereitet, aber bewusst deaktiviert.
+Die Produktionskonfiguration ist noch nicht abschliessend geprüft.
 
 ## Bestätigte Geschäftsangaben
 
@@ -44,15 +47,21 @@ Bei ausverkauftem Motiv den Verkauf vor weiteren Bestellungen sperren.
 
 - Produktions-Live-Schlüssel sicher in Vercel hinterlegen, korrektes Konto
   prüfen. Keine Geheimnisse im Chat oder im Repository.
-- Supabase-Serverzugang für Production bereitstellen (bisherige explizite
-  Geheimnisfreigabe galt Preview); passenden Live-Webhook mit eigener
-  Signatur auf `https://glow.bettundbad.ch/api/stripe-webhook` registrieren.
+- Supabase-Serverzugang ist für Preview und Production freigegeben und in
+  Vercel als Secret gespeichert. Eigener Production-Signaturschlüssel ist
+  hinterlegt. Live-Webhook `we_1USgwfLnJPWAKfhqVL5jbWW0` zeigt auf
+  `https://glow.bettundbad.ch/api/stripe-webhook`, API-Version
+  `2026-09-30.endive`, und empfängt nach Aktivierung
+  `checkout.session.completed` / `checkout.session.async_payment_succeeded`.
+  Er ist bis zur fertigen Live-Einrichtung deaktiviert. Kein Duplikat anlegen.
 - `STRIPE_MODE=live`, `VITE_SHOP_MODE=live`,
   `APP_URL=https://glow.bettundbad.ch`, `CHECKOUT_ENABLED=true` und
   `LIVE_CHECKOUT_APPROVED=true` erst beim koordinierten Start setzen.
   `VERCEL_ENV=production` setzt Vercel beim Produktionsdeployment automatisch.
   Zum Pausieren neuer Käufe nur `CHECKOUT_ENABLED=false` setzen:
   Webhooks und Zahlungsstatus müssen für bereits begonnene Käufe weiterlaufen.
+  Aktuell stehen `CHECKOUT_ENABLED` und `LIVE_CHECKOUT_APPROVED` in Production
+  ausdrücklich auf `false`; es wurde kein Produktionsdeployment durchgeführt.
 - Automatische Bestellbestätigung und Zahlungsbelege einrichten und
   Zustellung prüfen. Der aktuelle Code sendet noch keine Bestell-E-Mails.
 - Datenschutz vor Live-Start um geprüfte Speicherfristen, Hostingregion,
