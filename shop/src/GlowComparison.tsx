@@ -21,7 +21,7 @@ export default function GlowComparison({ initialProduct }: { initialProduct: str
         <Reveal className="glow-copy">
           <span className="section-number">02 / WENN ES DUNKEL WIRD</span>
           <h2 id="glow-title">Ein Abend.<br /><em>Zwei Stimmungen.</em></h2>
-          <p>Das Licht wird leiser.<br />Die kleinen Motive bleiben.</p>
+          <p>Das Licht wird leiser. Die kleinen Motive bleiben.</p>
           <div className="day-night" role="group" aria-label="Lichtansicht">
             <span className={`switch-track ${day === 0 ? "at-night" : ""}`} style={{opacity: day === 0 || day === 100 ? 1 : 0}} />
             <button aria-pressed={day === 100} onClick={() => setDay(100)}><Sun size={18} />Tag</button>

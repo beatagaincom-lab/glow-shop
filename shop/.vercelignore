@@ -1,4 +1,8 @@
 .env*
 .qa/
+output/
+scripts/
+supabase/
+tests/
 *.tsbuildinfo
 *.log
